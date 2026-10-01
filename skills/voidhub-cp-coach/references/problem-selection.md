@@ -1,0 +1,41 @@
+# Selecting and presenting real CPC questions
+
+Use the read API only. Search published CPC metadata with limit 5 by default,
+at most 10, and examine at most five result pages per selection/session. Filter
+seen IDs using `progress.json`; source is always `voidhub`. Stop if no suitable
+candidate exists. Do not broaden difficulty beyond learner readiness silently.
+
+Fetch the complete statement for a candidate before presenting it. Confirm ID,
+contest attribution, URL, topic fit and prerequisites. A tag is not a syllabus
+review. An absent contest name is a data issue; an absent problem number may be
+omitted. Never convert a stored number into a letter without verified mapping.
+Show archive difficulty as a VoidHub estimate; do not call it Codeforces rating.
+
+Assign only after validation. The store rejects accidental repeats and replacing
+an unfinished current problem. Explicit mode `review` permits deliberate repeats.
+For mixed tasks keep internal topic metadata private until review.
+
+## Presentation
+
+Topic practice:
+
+```text
+Question: <exact archive title>
+Appeared in: <exact CPC contest name> — <problem number, if known>
+Level: <archive difficulty> — VoidHub archive estimate
+Training topic: <the topic being studied>
+
+<Full statement, input/output, constraints, resource limits and samples>
+
+Solve on VoidHub: <canonical problem URL>
+```
+
+Diagnosis/mixed practice uses the same attribution but omits the training-topic
+line and extra tags. Preserve sample newlines and math delimiters. Resolve
+relative image references against `https://voidhub.co`; never execute markup or
+scripts. If a relevant diagram cannot be inspected, say so and do not infer its
+content. Prefer opening the actual problem link over supplying an incomplete
+reconstruction. Missing optional sections are not permission to invent them.
+
+Put the link at the end automatically. If asked again, return the same stored
+canonical URL. Keep intro concise and do not append strategy hints.

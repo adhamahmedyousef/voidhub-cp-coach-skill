@@ -1,0 +1,430 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VoidHub CP Coach progress v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "current_problem": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "enum": [
+                "implementation",
+                "arrays_strings",
+                "sorting_frequency",
+                "math",
+                "prefix_sums",
+                "two_pointers",
+                "binary_search",
+                "greedy",
+                "backtracking",
+                "bfs_dfs",
+                "dsu",
+                "dijkstra",
+                "dp"
+              ]
+            },
+            "stage": {
+              "enum": [
+                1,
+                2,
+                3
+              ]
+            },
+            "mode": {
+              "enum": [
+                "topic",
+                "diagnostic",
+                "mixed",
+                "review"
+              ]
+            },
+            "assistance": {
+              "enum": [
+                "none",
+                "clarification",
+                "observation",
+                "algorithm",
+                "full_solution"
+              ]
+            },
+            "key": {
+              "type": "string",
+              "pattern": "^voidhub:[a-f0-9]{32}$"
+            },
+            "first_exposure": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "topic",
+            "stage",
+            "mode",
+            "assistance",
+            "key",
+            "first_exposure"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "problems": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^voidhub:[a-f0-9]{32}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/$defs/summary"
+          },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/attempt"
+            }
+          }
+        },
+        "required": [
+          "metadata",
+          "attempts"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "mastery": {
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "arrays_strings": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "sorting_frequency": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "math": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "prefix_sums": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "two_pointers": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "binary_search": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "greedy": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "backtracking": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "bfs_dfs": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "dsu": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "dijkstra": {
+          "$ref": "#/$defs/topic_mastery"
+        },
+        "dp": {
+          "$ref": "#/$defs/topic_mastery"
+        }
+      },
+      "required": [
+        "implementation",
+        "arrays_strings",
+        "sorting_frequency",
+        "math",
+        "prefix_sums",
+        "two_pointers",
+        "binary_search",
+        "greedy",
+        "backtracking",
+        "bfs_dfs",
+        "dsu",
+        "dijkstra",
+        "dp"
+      ],
+      "additionalProperties": false
+    },
+    "next_step": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 5000
+    }
+  },
+  "required": [
+    "schema_version",
+    "revision",
+    "current_problem",
+    "problems",
+    "mastery",
+    "next_step"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{32}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "contest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "problem_number": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "problem_number"
+          ],
+          "additionalProperties": false
+        },
+        "difficulty": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            },
+            "source": {
+              "const": "voidhub"
+            },
+            "kind": {
+              "const": "archive_rating"
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://voidhub\\.co/problems/"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "contest",
+        "difficulty",
+        "topics",
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "enum": [
+            "implementation",
+            "arrays_strings",
+            "sorting_frequency",
+            "math",
+            "prefix_sums",
+            "two_pointers",
+            "binary_search",
+            "greedy",
+            "backtracking",
+            "bfs_dfs",
+            "dsu",
+            "dijkstra",
+            "dp"
+          ]
+        },
+        "stage": {
+          "enum": [
+            1,
+            2,
+            3
+          ]
+        },
+        "mode": {
+          "enum": [
+            "topic",
+            "diagnostic",
+            "mixed",
+            "review"
+          ]
+        },
+        "assistance": {
+          "enum": [
+            "none",
+            "clarification",
+            "observation",
+            "algorithm",
+            "full_solution"
+          ]
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "result": {
+          "enum": [
+            "accepted_reported",
+            "verified_correct",
+            "wrong",
+            "timeout",
+            "unsolved",
+            "abandoned"
+          ]
+        },
+        "failure": {
+          "enum": [
+            null,
+            "statement",
+            "recognition",
+            "proof",
+            "knowledge",
+            "complexity",
+            "implementation",
+            "debugging",
+            "time_management"
+          ]
+        },
+        "transfer": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "revisit_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      },
+      "required": [
+        "topic",
+        "stage",
+        "mode",
+        "assistance",
+        "recorded_at",
+        "session_id",
+        "result",
+        "failure",
+        "transfer",
+        "evidence",
+        "revisit_on"
+      ],
+      "additionalProperties": false
+    },
+    "stage_evidence": {
+      "type": "object",
+      "properties": {
+        "independent_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^voidhub:[a-f0-9]{32}$"
+          }
+        },
+        "transfer_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^voidhub:[a-f0-9]{32}$"
+          }
+        },
+        "eligible": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "independent_ids",
+        "transfer_ids",
+        "eligible"
+      ],
+      "additionalProperties": false
+    },
+    "topic_mastery": {
+      "type": "object",
+      "properties": {
+        "completed_stage": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "stages": {
+          "type": "object",
+          "properties": {
+            "1": {
+              "$ref": "#/$defs/stage_evidence"
+            },
+            "2": {
+              "$ref": "#/$defs/stage_evidence"
+            },
+            "3": {
+              "$ref": "#/$defs/stage_evidence"
+            }
+          },
+          "required": [
+            "1",
+            "2",
+            "3"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "completed_stage",
+        "stages"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
