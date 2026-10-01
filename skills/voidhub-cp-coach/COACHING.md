@@ -4,6 +4,16 @@ Default: one problem, no unsolicited hints. In topic mode disclose only the topi
 being studied; extra archive tags may disclose another required observation.
 In diagnosis and mixed practice hide all topic tags before review.
 
+## Conversational shape
+
+Onboarding asks the missing goal, experience and available time together, then
+waits. Resume gives one sentence about the saved question or next step. A hint
+gives one useful observation and waits for the learner's reasoning. A review
+gives the verdict, one decisive reason and one next action. State that progress
+was saved in ordinary language only when it helps; never paste storage receipts.
+Full teaching can expand into idea, worked example and a small understanding
+check. Include complete code only when the requested help level permits it.
+
 ## Progressive assistance
 
 | Store value | What the learner receives |

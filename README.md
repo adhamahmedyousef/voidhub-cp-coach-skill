@@ -4,136 +4,93 @@ Your competitive programming coach, with adaptive practice and progress that car
 
 Powered by [VoidHub](https://voidhub.co/)
 
-## What it does
+VoidHub CP Coach helps you prepare for ECPC, ACPC and ICPC through real CPC
+problems from VoidHub. It starts with your goal, experience and available time,
+then assesses your level with three problems, one at a time. Training grows from
+direct topic practice into combined ideas and mixed problem solving.
 
-- Diagnoses your starting point with three real CPC problems, one at a time.
-- Builds beginner-to-intermediate practice across thirteen topics.
-- Names each problem's contest, preserves its statement and links to VoidHub.
-- Tracks assistance, weaknesses, spaced reviews and progress across chats.
+The coach keeps replies brief and gives you room to think. Hints come when you
+ask, one step at a time. A complete solution requires an explicit request and is
+recorded as assistance. Reviews use your reasoning, code and actual outcome to
+choose the next step; they do not treat a few passing examples as proof.
 
-Hints follow your requests. Complete solutions require an explicit request and
-count as assistance. Each stage needs three distinct independent successes,
-including an unseen transfer problem. Archive ratings and educational levels
-are separate; the skill does not promise perfect coaching accuracy.
+Every practice question includes its title, contest, VoidHub difficulty,
+statement, samples and link. The trained topic appears in topic practice and
+stays hidden during diagnosis and mixed practice. Archive ratings are estimates;
+original contest indices are shown only when verified.
 
-## Structure
+## Start training
 
-```text
-skills/voidhub-cp-coach/
-├── SKILL.md
-├── WORKFLOW.md
-├── COACHING.md
-├── CURRICULUM.md
-├── PROBLEMS.md
-├── progress.schema.json
-├── agents/openai.yaml
-├── scripts/
-│   ├── archive_client.py
-│   ├── progress_store.py
-│   └── setup_access.py
-└── tests/
-```
-
-[SKILL.md](skills/voidhub-cp-coach/SKILL.md) is the entry point.
-[WORKFLOW.md](skills/voidhub-cp-coach/WORKFLOW.md) describes sessions and script contracts;
-[COACHING.md](skills/voidhub-cp-coach/COACHING.md) defines assistance, evidence and evaluation;
-[CURRICULUM.md](skills/voidhub-cp-coach/CURRICULUM.md) defines prerequisites and stages;
-[PROBLEMS.md](skills/voidhub-cp-coach/PROBLEMS.md) governs selection and presentation.
-The JSON schema documents learner state. Scripts handle API access, persistence
-and private trial credentials; tests verify those behaviors.
-
-## Install and start
-
-Requires Python 3.10+ and an approved VoidHub read-API key. Runtime scripts use
-only the Python standard library.
+You need Python 3.10+ and an approved VoidHub Coach API key. The skill's scripts
+use the Python standard library and have no runtime package dependencies.
 
 Copy `skills/voidhub-cp-coach` into `.agents/skills/voidhub-cp-coach` in your
-training workspace, then reload skill discovery. Start with:
+training workspace, reload your agent's skill discovery and start:
 
 ```text
 $voidhub-cp-coach
 Help me prepare for ECPC. Assess my level and build a realistic weekly plan.
 ```
 
-For review before installation, ask the agent to follow the bundled `SKILL.md`.
-Learner files live outside the installed skill, by default in
-`voidhub-coach-data` in the training workspace: `profile.md`, `plan.md` and
-`progress.json`. Use the same directory in subsequent chats. Keep it out of Git.
+Use the same training workspace when you continue in another chat. You can also
+point your agent directly at the bundled `SKILL.md` to review the behavior before
+installing it.
 
-## Trial API access
+## Memory that carries forward
 
-Access covers published CPC statements, samples and metadata through
-`POST /api/coach/v1/search` and `POST /api/coach/v1/problem`. It does not provide
-solutions, private tests or submission access. Keys are provisioned per
-installation; bearer authentication cannot prove that a caller is the skill.
+The coach creates `voidhub-coach-data` in your training workspace. `profile.md`
+keeps your goals, preferences and lasting learning notes. `plan.md` keeps the
+current workload and a short session handoff. `progress.json` keeps attempts,
+hints, reviews, mastery evidence and the unfinished question.
 
-From this repository, generate a private local credential:
+A new chat reads a compact summary and continues from the saved next step. It
+does not load the entire history into context or replace your plan on each run.
+The full history remains on disk, outside the installed skill, so skill updates
+preserve your progress. Another device needs access to those same learner files.
+Keep learner data and credentials out of Git.
+
+## Archive access
+
+The coach reads published CPC problems through two authenticated operations:
+`POST /api/coach/v1/search` and `POST /api/coach/v1/problem`. They return public
+metadata, statements and samples. They do not provide solutions, private tests
+or submission access. Each approved installation uses its own bearer key.
+
+To provision a trial credential from this repository:
 
 ```powershell
 python skills/voidhub-cp-coach/scripts/setup_access.py
 ```
 
-The tool displays its path and SHA-256 digest only. On Windows the token is saved
-under `%LOCALAPPDATA%\VoidHubCoach\credentials\trial.token`. Add the digest to
-`COACH_API_KEY_HASHES` in the VoidHub hosting environment, preserving existing
-comma-separated digests, and restart the service. Never upload the token.
-For a Railway-hosted service behind its HTTPS edge, enable
-`COACH_API_TRUST_RAILWAY_PROXY=true` after deploying the corresponding server
-change. Only enable this when requests reach the app through that trusted edge.
-
-Load the key locally and test without putting it in command arguments:
+The tool stores the key privately and displays only its path and SHA-256 digest.
+The hosting owner adds that digest to `COACH_API_KEY_HASHES`, preserving existing
+comma-separated entries, and restarts the service. On Windows, load your local
+key into the process environment:
 
 ```powershell
 $env:VOIDHUB_COACH_API_KEY = (Get-Content -Raw "$env:LOCALAPPDATA\VoidHubCoach\credentials\trial.token").Trim()
-python skills/voidhub-cp-coach/scripts/archive_client.py search --state-dir ./voidhub-coach-data --limit 1
-python skills/voidhub-cp-coach/scripts/archive_client.py problem --state-dir ./voidhub-coach-data --id <returned-id>
+python skills/voidhub-cp-coach/scripts/archive_client.py search --state-dir ./voidhub-coach-data --limit 3 --output ./voidhub-coach-data/search.json
 ```
 
-A minimal caller, with the same environment variable:
+The client bounds request frequency and response sizes, rejects redirects and
+checks returned data. If access is unavailable, the coach saves the pending
+step and waits rather than inventing a question. A bearer key can be used by any
+caller who possesses it; access is dedicated to the coach without proving the
+identity of its client. Railway proxy setup and API contracts live in
+[WORKFLOW.md](skills/voidhub-cp-coach/WORKFLOW.md).
 
-```python
-import os
-import requests
+## Inside the skill
 
-req = requests.post(
-    "https://voidhub.co/api/coach/v1/search",
-    headers={"Authorization": "Bearer " + os.environ["VOIDHUB_COACH_API_KEY"],
-             "Accept": "application/json", "User-Agent": "VoidHub-CP-Coach/0.1"},
-    json={"topic": "binary search", "limit": 5},
-    timeout=(5, 15),
-    allow_redirects=False,
-)
-req.raise_for_status()
-data = req.json()
-```
+[SKILL.md](skills/voidhub-cp-coach/SKILL.md) defines the coach's behavior and routes
+to guidance as needed. [WORKFLOW.md](skills/voidhub-cp-coach/WORKFLOW.md) describes
+sessions and archive access. [COACHING.md](skills/voidhub-cp-coach/COACHING.md)
+covers hints and reviews. [CURRICULUM.md](skills/voidhub-cp-coach/CURRICULUM.md)
+defines thirteen topics and their stages. [PROBLEMS.md](skills/voidhub-cp-coach/PROBLEMS.md)
+governs question selection and presentation. [MEMORY.md](skills/voidhub-cp-coach/MEMORY.md)
+defines learner memory and its commands.
 
-Use `/problem` with `json={"id": returned_id}` for a statement. The bundled
-client adds response validation, download limits and persistent pacing: at
-least 1.1 seconds between calls, at most 20 per minute. It rejects redirects,
-bounds 429 retries and does not retry rejected keys or disabled service.
-Server limits apply across clients. If access fails, diagnosis waits;
-archive questions are never invented.
-
-## Validation
-
-```text
-python -m unittest discover -s skills/voidhub-cp-coach/tests -v
-```
-
-All 34 local tests pass, and the skill format validator passes.
-Tests cover client failures, response validation, concurrent and interrupted
-state writes, repeat prevention, assistance tracking and packaging. Fixtures
-are synthetic and do not query production or submit code. Behavioral scenarios
-and a manual evaluation rubric are included in `COACHING.md`; automated state
-checks do not establish the quality of an actual coaching conversation.
-
-Live search and statement retrieval both passed on 2026-10-01 using the bundled
-client and the deployed API. Identity, response schema and content checksum
-validation passed for one problem. For Nonogram, statement sections matched the public page after whitespace
-normalization; sample input/output matched exactly, including blank lines.
-Live rejection checks passed for invalid credentials (401), unexpected fields
-(400) and an unknown ID (404). Images and original contest-source fidelity
-remain unverified. In API v1, `contest.problem_number` is a VoidHub archive
-position, not an original contest index; coaching must not confuse them.
-Advanced curriculum and automated key enrollment are future work.
-No license has been selected yet.
+Three Python helpers handle archive access, progress and credential setup.
+`agents/openai.yaml` supplies display metadata, and `progress.schema.json`
+describes the saved state. Behavioral and script tests remain under `tests/`.
+The curriculum covers beginner-to-intermediate preparation; advanced topics are
+outside this first version.

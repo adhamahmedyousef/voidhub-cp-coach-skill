@@ -2,7 +2,8 @@
 
 ## Opening
 
-Read all three learner files. If absent, initialize through the store. Ask only
+Read the compact resume summary plus profile and plan through [MEMORY.md](MEMORY.md).
+Initialize through the store only when the learner directory is new. Ask only
 missing profile facts: target contest/goal, experience, recent practice, weekly
 time, language and desired coaching firmness. No personal assumptions from the
 skill author should become a learner's profile. Record timezone if scheduling.
@@ -91,39 +92,10 @@ values require resuming later. 401/503/redirects/network errors are not retried
 automatically. This v1 client does not cache statements or silently serve stale
 content. Retain selected public output only in learner data, not the skill.
 
-## Progress store
+## Hosting setup
 
-```text
-python scripts/progress_store.py init --data-dir <learner-dir>
-python scripts/progress_store.py show --data-dir <learner-dir>
-python scripts/progress_store.py assign --data-dir <learner-dir> --input <assignment.json>
-python scripts/progress_store.py hint --data-dir <learner-dir> --level observation
-python scripts/progress_store.py record --data-dir <learner-dir> --input <attempt.json>
-python scripts/progress_store.py next --data-dir <learner-dir> --text "Concrete next step"
-python scripts/progress_store.py profile --data-dir <learner-dir> --input <profile.md>
-python scripts/progress_store.py plan --data-dir <learner-dir> --input <plan.md>
-```
-
-Assignment JSON has exactly `problem` (the six-field API summary), `topic`
-(internal curriculum ID), `stage` (1–3), `mode` (`topic`, `diagnostic`, `mixed`,
-`review`). The store owns key, first-exposure flag and initial assistance.
-
-Attempt JSON has exactly `session_id`, `result`, `assistance`, `failure`,
-`transfer` (boolean), `evidence` (nonempty observed basis), `revisit_on` (ISO date
-or null). Use a stable session ID per conversation/training session. Results:
-accepted_reported, verified_correct, wrong, timeout, unsolved, abandoned.
-Assistance: none, clarification, observation, algorithm, full_solution.
-Failure: null or statement, recognition, proof, knowledge, complexity,
-implementation, debugging, time_management. Assisted attempts require a date.
-
-The store timestamps attempts, preserves the highest assistance and derives
-mastery from distinct independent task IDs. Repeated tasks cannot count as
-unseen transfer. Corrupt/unknown-version data remains untouched. A crashed
-writer can leave `.progress.lock`; do not delete it unless the owning process
-has stopped and the learner has reviewed the lock. There is no automatic reset.
-
-JSON is authoritative for current identity, attempts, mastery and next step.
-Profile notes describe goals/preferences; plan notes describe workload and
-reasoning. If a stale note conflicts with JSON, reconcile the note rather than
-changing recorded evidence. State writes and Markdown updates are individually
-atomic, not a transaction across all three files; read JSON first after a crash.
+The hosting owner allowlists installation SHA-256 digests with
+`COACH_API_KEY_HASHES`. On Railway, enable `COACH_API_TRUST_RAILWAY_PROXY=true`
+only when API ingress passes through its trusted HTTPS edge. Deploy the matching
+server code and restart the service after environment changes. Credentials
+never appear in command arguments, learner notes or Git.

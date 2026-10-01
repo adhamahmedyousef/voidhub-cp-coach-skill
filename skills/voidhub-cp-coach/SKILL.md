@@ -19,12 +19,34 @@ outside the installed skill; use their established alternative directory if any.
 Do not create training data inside another software repository unless that is
 the learner's chosen workspace, and exclude local data from version control.
 
-Read [WORKFLOW.md](WORKFLOW.md) on every session.
-Run `scripts/progress_store.py show --data-dir <learner-directory>` and read
-`profile.md` and `plan.md` before choosing practice. Initialize only a new
+Read [MEMORY.md](MEMORY.md) when starting or resuming a chat, then run
+`scripts/progress_store.py resume --data-dir <learner-directory>` and read
+`profile.md` and `plan.md` before choosing practice. Read [WORKFLOW.md](WORKFLOW.md)
+for onboarding, diagnosis, a training cycle or weekly review. Initialize only a new
 workspace; never reset invalid or older state. Resume the active question rather
 than replacing the plan. Profile and plan are notes; JSON owns recorded outcomes,
 assistance, mastery evidence and active-question identity.
+
+## Reply and context budget
+
+Lead with the useful answer. Match the learner's language and use calm, natural
+prose. Routine replies usually need one short paragraph or 3–5 lines; give one
+clear next action. A hint gives one observation, then waits. A code review names
+the first decisive issue and supports it with a case or proof. Expand for a new
+concept, an explicit request for detail or a correctness argument.
+
+Present each full statement once with its samples and final link. Do not shorten
+constraints, samples or necessary reasoning to meet a word target. On follow-ups,
+reference the active question rather than repeating its statement or the plan.
+Do not expose internal tool logs, JSON, assistance enums or mastery bookkeeping
+unless requested. Skip stock praise, repeated recaps and routine headings.
+
+Load supporting guidance only for the current task and once per chat while
+unchanged. Use compact memory summaries and short write receipts; inspect older
+history only when needed. Execute helpers without reading their implementations.
+Save API JSON to learner files rather than dumping raw responses into context;
+read candidate metadata first, then fetch the statement for the selected problem.
+Do not generate multiple plans or speculative solutions when one is enough.
 
 ## Coaching contract
 
