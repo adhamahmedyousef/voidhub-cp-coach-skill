@@ -19,11 +19,11 @@ class PackagingTests(unittest.TestCase):
         entry = (SKILL / "SKILL.md").read_text(encoding="utf-8")
         self.assertTrue(entry.startswith("---\nname: voidhub-cp-coach\n"))
         self.assertIn("description:", entry)
-        for relative in re.findall(r"\]\((references/[^)]+)\)", entry):
+        for relative in re.findall(r"\]\(((?:WORKFLOW|COACHING|CURRICULUM|PROBLEMS)\.md)\)", entry):
             self.assertTrue((SKILL / relative).is_file(), relative)
         for path in SKILL.rglob("*.md"):
             self.assertNotIn("[TODO:", path.read_text(encoding="utf-8"))
-        schema = json.loads((SKILL / "schemas/progress.schema.json").read_text())
+        schema = json.loads((SKILL / "progress.schema.json").read_text())
         self.assertEqual(schema["properties"]["schema_version"]["const"], 1)
 
     def test_provision_never_prints_raw_key_and_reuses_then_rotates(self):

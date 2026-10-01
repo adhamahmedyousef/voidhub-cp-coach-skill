@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from urllib.error import HTTPError, URLError
 
-SCRIPTS = Path(__file__).resolve().parents[1] / "skills/voidhub-cp-coach/scripts"
+SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 from archive_client import ArchiveClient, ClientError, MAX_BYTES, NoRedirect, validate_response
 

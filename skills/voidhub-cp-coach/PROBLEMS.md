@@ -8,7 +8,11 @@ candidate exists. Do not broaden difficulty beyond learner readiness silently.
 Fetch the complete statement for a candidate before presenting it. Confirm ID,
 contest attribution, URL, topic fit and prerequisites. A tag is not a syllabus
 review. An absent contest name is a data issue; an absent problem number may be
-omitted. Never convert a stored number into a letter without verified mapping.
+omitted. In API v1, `contest.problem_number` is the VoidHub collection-wide
+archive position, not the original contest index. Omit it from the contest
+attribution; if useful, show it separately as "VoidHub archive number". Only
+state an original contest index when independently verified. Never convert
+an archive number into a contest letter.
 Show archive difficulty as a VoidHub estimate; do not call it Codeforces rating.
 
 Assign only after validation. The store rejects accidental repeats and replacing
@@ -21,7 +25,8 @@ Topic practice:
 
 ```text
 Question: <exact archive title>
-Appeared in: <exact CPC contest name> — <problem number, if known>
+Appeared in: <exact CPC contest name>
+Original contest index: <only if independently verified; otherwise omit>
 Level: <archive difficulty> — VoidHub archive estimate
 Training topic: <the topic being studied>
 
