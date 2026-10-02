@@ -22,7 +22,11 @@ class PackagingTests(unittest.TestCase):
         entry = (SKILL / "SKILL.md").read_text(encoding="utf-8")
         self.assertTrue(entry.startswith("---\nname: voidhub-cp-coach\n"))
         self.assertIn("description:", entry)
-        for document in [ROOT / "README.md", *SKILL.rglob("*.md")]:
+        for document in [
+            ROOT / "README.md",
+            *(ROOT / ".github").glob("*.md"),
+            *SKILL.rglob("*.md"),
+        ]:
             for relative in re.findall(
                 r"\]\(([^)]+)\)", document.read_text(encoding="utf-8")
             ):

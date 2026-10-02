@@ -111,14 +111,22 @@ Three Python helpers handle archive access, progress and credential setup.
 describes the saved state.
 [RESOURCES.md](skills/voidhub-cp-coach/references/RESOURCES.md) governs video
 selection, and `curriculum.json` defines coverage and dependencies. Supporting
-guidance lives in `references/`; regression tests stay at the repository root in
-`tests/`, outside the installable skill. GitHub Actions runs them on Windows and
+guidance lives in `references/`; regression tests live in `.github/tests/`,
+outside the installable skill. GitHub Actions runs them on Windows and
 Linux with Python 3.10 and 3.13. To run them locally:
 
 ```text
-python -B -m unittest discover -s tests
+python -B -m unittest discover -s .github/tests
 ```
 
 The catalog covers the requested route's topics; suitable CPC questions and
 teaching resources still need verification for each lesson. Educational quality
 requires session review.
+
+## Contributing
+
+See the [contribution guide](.github/CONTRIBUTING.md) for changes and local checks,
+the [code of conduct](.github/CODE_OF_CONDUCT.md) for participation, and the
+[security policy](.github/SECURITY.md) for reporting vulnerabilities.
+The skill's code and documentation are available under the [MIT license](LICENSE).
+VoidHub problem content and service access remain subject to their own terms.

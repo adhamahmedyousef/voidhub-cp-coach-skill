@@ -10,7 +10,7 @@ import unittest
 from urllib.error import HTTPError, URLError
 
 SCRIPTS = (
-    Path(__file__).resolve().parents[1] / "skills" / "voidhub-cp-coach" / "scripts"
+    Path(__file__).resolve().parents[2] / "skills" / "voidhub-cp-coach" / "scripts"
 )
 sys.path.insert(0, str(SCRIPTS))
 from archive_client import (
