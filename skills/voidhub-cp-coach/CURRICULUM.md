@@ -1,116 +1,148 @@
-# Beginner-to-intermediate curriculum
+# VoidHub training curriculum
 
-The learner can enter at a diagnosed point. Prerequisites describe demonstrated
-skills, not a mandatory lecture sequence. Explain and check missing knowledge
-before assigning tasks that depend on it. API ratings are archive metadata and
-may be defaults; do not interpret them as reviewed educational levels.
+This route spans programming foundations through advanced competitive programming.
+It follows the requested camp's subject coverage with different grouping and
+prerequisite-based pacing. A tracked topic does not guarantee a suitable CPC
+exercise or a reviewed teaching resource is available in the archive.
 
-## VoidHub learning route
+## Route and starting point
 
-Organize training around five practical capabilities rather than numbered camp
-levels. Select the next capability from the learner's goal, prerequisite gaps
-and observed attempts. Topics remain standard algorithm names because renaming
-them would make practice less precise; their grouping, emphasis and pacing are
-specific to this coach. No external roadmap is required to use this curriculum.
+Ask goal, time, language and reported strong/weak topics; record claims separately
+from demonstrated ability. Diagnose with three real questions, one at a time,
+then assess further gaps through targeted practice. Three questions cannot test
+all 38 topics. Start at an evidenced gap rather than repeating known lessons.
 
-| Capability | Learning focus | Tracked topics |
+C++ syntax, loops, functions, STL containers and comparators are supporting
+lessons. Comprehension, tracing, proof, complexity and debugging recur throughout.
+`curriculum.json` is the canonical catalog of coverage and prerequisites; load
+only the entries needed for the current topic and its next candidate.
+
+## Training tracks
+
+The sequence is a planning guide; actual dependencies determine the order.
+Math, graphs and DP can be interleaved as the learner's gaps require.
+
+### Foundations
+
+| Topic ID | Scope | Prerequisites |
 | --- | --- | --- |
-| Understand and implement | Extract the task, trace examples, represent data, implement and debug edge cases | implementation, arrays_strings |
-| Organize and preprocess data | Count, order, aggregate and answer range questions; justify time/memory | sorting_frequency, math, prefix_sums |
-| Choose and justify an approach | Establish monotonicity, pointer invariants and local-choice correctness | two_pointers, binary_search, greedy |
-| Explore states and dependencies | Bound enumeration; model grids/graphs; choose traversal or search | backtracking, bfs_dfs |
-| Connect and reuse results | Model connectivity, weighted paths and reusable subproblems | dsu, dijkstra, dp |
+| `implementation` | Tracing, conditions, loops and simulation | Language basics |
+| `arrays_strings` | Indexing, representation and traversal | implementation |
+| `sorting_frequency` | Frequency arrays, ordering, custom comparators | arrays_strings |
+| `math` | Parity, divisibility and invariants | implementation |
 
-These capabilities overlap; they are not five certificates or five weeks.
-For example, a learner strong in implementation but weak in choosing an approach
-can work on reasoning while reviewing only the missing preprocessing skill.
-A beginner needs language, loops and indexing first; an experienced learner
-should not repeat those lessons merely to follow an ordered list.
+### Data techniques
 
-### Select the starting point
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `prefix_sums` | Prefix/suffix, difference arrays and 2D sums | arrays_strings |
+| `two_pointers` | Pointer invariants, fixed/variable windows | arrays_strings, sorting_frequency |
+| `monotonic_stack` | Nearest greater/smaller, amortized analysis and sliding extrema | arrays_strings |
 
-Ask which topics the learner believes they handle well, which they have only
-studied and which feel difficult. Ask for a recent representative problem or
-explanation when it materially helps diagnosis; do not require proof for every
-self-report before practice can begin. Save the reported topic map in profile.
-Three diagnostic problems sample selected gaps; they cannot establish mastery
-of every topic. Use later targeted practice to confirm individual strengths.
+### Reasoning
 
-Use self-reports to choose diagnosis and avoid unnecessary lectures. Preserve
-the distinction between a claimed strength, an observed successful application
-and mastery supported by independent attempts. A single accepted problem does
-not establish strength across a whole algorithm family. Existing topic stages
-provide evidence; review explanation, coverage and transfer before advancing.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `binary_search` | Ordered search, monotone predicates, answer search | sorting_frequency |
+| `greedy` | Exchange arguments and counterexamples | sorting_frequency |
+| `number_theory` | GCD/LCM, primes, sieve, factorization, modular arithmetic and inverses | math |
+| `counting` | Sum/product rules, combinations, permutations and modular counting | number_theory |
+| `bitwise` | Binary representation, shifts, set tests and subset enumeration | math |
 
-### Teach the missing skill
+### Search
 
-Language syntax and STL are supporting lessons taught as needed. Statement
-comprehension, tracing, complexity, invariants, proofs and debugging are assessed
-throughout the route, rather than postponed to a separate final chapter.
-Retain recurring gaps and demonstrated strengths in profile; put the current
-subtopic and concrete next exercise in plan. Do not create extra tracked IDs
-for each lecture or count a supporting lesson as a solved problem.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `backtracking` | Enumeration, pruning and undoing state | recursion |
+| `recursion` | Call stack, base cases, recurrence and divide-and-conquer | implementation |
 
-Adapt combinations to readiness: frequency with sorting, prefix sums with
-range reasoning, answer search with a check function, recursion with bounded
-search, graph modelling with traversal, then simple state transitions for DP.
-Use small instructional examples before real CPC practice where needed, and
-label those examples clearly rather than assigning them invented contest sources.
+### Graphs
 
-### Plan a sustainable week
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `bfs_dfs` | Flood fill, components, bipartiteness, unweighted and multisource BFS | arrays_strings, recursion |
+| `dsu` | Connectivity, path compression and union by size | bfs_dfs |
+| `dijkstra` | Nonnegative weighted paths, priority queues and modelling | bfs_dfs |
+| `topological_sort` | Dependencies, Kahn/DFS ordering and cycle detection | bfs_dfs |
 
-Choose workload from the learner's available time and actual solving pace.
-Normally combine explanation when needed, one question, review and a saved next
-step. Reserve time for assisted upsolving and mixed practice. Missed sessions
-trigger a smaller realistic plan rather than an accumulating backlog.
+### Dynamic programming
 
-Advance only after the required independent evidence and lesson coverage.
-When time or archive availability is limited, narrow the target skill; do not
-assign an unsuitable harder problem simply to fill a weekly slot. If bounded
-search finds no suitable problem, explain the gap and save the pending action.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `dp` | States, transitions, base cases, simple grid and knapsack | recursion |
+| `dp_ranges` | Range transitions; use proven structure rather than assumed optimization | dp, segment_tree |
+| `digit_dp` | Position, tightness, leading zero and range subtraction | dp, number_theory |
+| `bitmask_dp` | Subset states, transitions and exponential bounds | dp, bitwise |
 
-### Current scope
+### Range queries
 
-The tracked route covers the thirteen topics below. Monotonic stacks, dedicated
-number-theory subtopics, range-query structures, advanced DP, advanced tree
-methods and string algorithms need their own curriculum and tracking extension
-before they can be advertised as supported mastery paths. Record a learner's
-request for such material; do not disguise it under a related basic topic.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `fenwick` | Point updates, prefix/range queries and indexing invariants | prefix_sums, bitwise |
+| `sparse_table` | Static idempotent queries and overlapping blocks | prefix_sums, bitwise |
+| `segment_tree` | Merge identity, build, point update and interval query | recursion, prefix_sums |
+| `merge_sort_tree` | Sorted node vectors and static range counting | segment_tree, binary_search |
+| `lazy_segment_tree` | Range operations, tag composition and push/pull invariants | segment_tree |
 
-## Tracked topics and mastery
+### Advanced connectivity
 
-Every topic has three stages: (1) direct application and explanation, (2)
-combination/adaptation, (3) recognition in mixed practice. Each stage needs three
-different independent successes, including at least one unseen transfer task.
-The store derives eligibility from actual records. Never pre-fill mastery.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `rollback_dsu` | Change stack, snapshots and offline dynamic connectivity; no unsafe path compression | dsu |
+| `mst` | Kruskal/Prim, cut property and disconnected graphs | dsu, greedy |
 
-| Internal topic | Prerequisite skills | Stage 1 → 2 → 3 | Candidate tag hints |
-| --- | --- | --- | --- |
-| implementation | Basic I/O, loops, conditions | Simulation → edge cases/state → selecting a simple model | implementation |
-| arrays_strings | Implementation | Traversal/indexing → transformations → choosing a representation | strings, implementation |
-| sorting_frequency | Arrays/strings | Sort/count → grouping/order properties → recognition | sortings, sorting |
-| math | Implementation | Parity/divisibility/counting → formulas/invariants → recognizing structure | math |
-| prefix_sums | Arrays, arithmetic | Static range sums → differences/2D prefix sums → choosing preprocessing | prefix sums |
-| two_pointers | Arrays, sorting where needed | Pointer invariants → windows/pair counting → recognizing monotonic movement | two pointers |
-| binary_search | Sorted order, proof of monotonicity | Search in an ordered domain → answer search/check function → recognition/proof | binary search |
-| greedy | Sorting, invariants/proof | Local choice → exchange argument → testing when greedy fails | greedy |
-| backtracking | Recursion, complexity | Enumeration → pruning/state undo → selecting bounded search | brute force, backtracking |
-| bfs_dfs | Arrays, recursion/queue, graph representation | Reachability/grid → components, multi-source BFS and DAG ordering → selecting traversal | dfs and similar, graphs |
-| dsu | Graph connectivity | Union/find → offline connectivity → choosing DSU over traversal | dsu |
-| dijkstra | BFS, weighted graphs, priority queue | Nonnegative shortest path → graph modelling → method selection | shortest paths |
-| dp | Recursion/state, complexity | Simple state/transition → knapsack/grid → recognizing subproblems | dp |
+### Trees
 
-Candidate tags are search hints, not a guaranteed vocabulary. An empty exact-tag
-query may mean the archive uses a different name. Inspect bounded metadata
-without that tag and confirm the intended topic from the full problem. Do not
-invent tags, difficulty, statements or suitability from names alone.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `euler_tour` | Entry/exit intervals, subtree ranges and DFS representation | bfs_dfs, prefix_sums |
+| `lca` | Ancestor jumps, depth alignment and path queries | euler_tour, bitwise |
+| `dsu_on_tree` | Merge-size argument, sack retention and clearing | euler_tour, sorting_frequency |
 
-Stage 2/3 combinations can require multiple completed foundations. If an archive
-question depends on an advanced concept outside this table, postpone it or
-explicitly mark it outside v1 rather than disguising it as beginner practice.
-Advanced trees/segment trees, flow, geometry and advanced DP are outside v1.
+### Strings
 
-For initial calibration use a small range around reported ability (or easy
-implementation for a complete beginner), then adjust using observed performance.
-No fixed rating range guarantees topic fit or readiness. Record why a selected
-question targets the learner's demonstrated gap.
+| Topic ID | Scope | Prerequisites |
+| --- | --- | --- |
+| `kmp` | Prefix function, fallback links, matching and automaton DP | arrays_strings, dp |
+| `z_algorithm` | Z-box invariant, matching and borders | arrays_strings |
+| `trie` | Prefix representation, insert/query and memory bounds | arrays_strings |
+| `binary_trie` | Bitwise traversal and XOR queries | trie, bitwise |
+| `hashing` | Substring normalization and probabilistic collision limits | arrays_strings, number_theory |
+| `dynamic_hashing` | Maintain hash merges under updates; preserve collision caveats | hashing, segment_tree |
+
+## Stages and the coach's decision
+
+Every topic has direct application, adaptation and mixed recognition stages.
+Each stage needs three distinct independent successes, including an unseen
+transfer task. Earlier stages cannot be skipped. The store derives eligibility;
+the coach checks understanding, complexity, coverage and prerequisites.
+
+After a reviewed outcome, the coach records continue, advance or review_prerequisite.
+If the learner cannot explain correctness, misjudges cost or needs algorithmic
+help, stay on the stage and target that gap. Watching a video, reporting confidence
+or repeating a question does not count as unseen transfer or independent mastery.
+
+Advance one stage at a time only with the required evidence and all four explicit
+checks. Move to another topic after the source's third stage, with direct-application
+evidence for target prerequisites. An unfinished question blocks advancement.
+Save the decision and reason before announcing it; give one concrete next task.
+
+A diagnosed starting point is not an earned advancement. Respect a learner's
+request to explore elsewhere, record reassessment and keep prior mastery unchanged.
+Review contradictory new failures instead of deleting earlier evidence.
+
+## Sustainable practice
+
+Use the actual weekly time and solving pace. A block normally contains an
+explanation if needed, one understanding check, one real question and review.
+Reserve time for assisted upsolving and mixed practice. Missed sessions call
+for a smaller realistic workload rather than a growing backlog.
+
+Choose a suitable video through [RESOURCES.md](RESOURCES.md) when it addresses
+the current gap. Follow viewing with a trace/explanation and independent practice.
+If bounded archive search finds no suitable problem, record the gap and defer
+assignment rather than inventing a contest question or misusing a low rating.
+
+Flow, computational geometry and subjects outside the catalog remain outside
+this route until their curriculum and tracking are added. Educational judgment,
+source quality and semantic transfer still require actual session review.

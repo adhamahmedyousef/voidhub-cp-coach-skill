@@ -20,13 +20,14 @@ class PackagingTests(unittest.TestCase):
         self.assertTrue(entry.startswith("---\nname: voidhub-cp-coach\n"))
         self.assertIn("description:", entry)
         for relative in re.findall(
-            r"\]\(((?:WORKFLOW|COACHING|CURRICULUM|PROBLEMS|MEMORY)\.md)\)", entry
+            r"\]\(((?:WORKFLOW|COACHING|CURRICULUM|PROBLEMS|MEMORY|RESOURCES)\.md)\)",
+            entry,
         ):
             self.assertTrue((SKILL / relative).is_file(), relative)
         for path in SKILL.rglob("*.md"):
             self.assertNotIn("[TODO:", path.read_text(encoding="utf-8"))
         schema = json.loads((SKILL / "progress.schema.json").read_text())
-        self.assertEqual(schema["properties"]["schema_version"]["const"], 1)
+        self.assertEqual(schema["properties"]["schema_version"]["const"], 2)
 
     def test_provision_never_prints_raw_key_and_reuses_then_rotates(self):
         with tempfile.TemporaryDirectory() as directory:

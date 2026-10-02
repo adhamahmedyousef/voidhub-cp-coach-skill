@@ -10,9 +10,12 @@ then assesses your level with three problems, one at a time. Training follows
 a flexible VoidHub route: understanding and implementation,
 data organization, algorithmic reasoning, state exploration, then connectivity
 and dynamic programming. Your demonstrated strengths and gaps determine the
-starting point and pace. Advanced topics remain outside this first version.
+starting point and pace. The catalog tracks 38 topics, including advanced range
+queries, tree methods, DP and string algorithms.
 
-The coach keeps replies brief and gives you room to think. Hints come when you
+The coach keeps replies brief and gives you room to think. It recommends a
+verified YouTube explanation when it fits your language, knowledge and current
+gap. Hints come when you
 ask, one step at a time. A complete solution requires an explicit request and is
 recorded as assistance. Reviews use your reasoning, code and actual outcome to
 choose the next step; they do not treat a few passing examples as proof.
@@ -45,7 +48,9 @@ The coach creates `voidhub-coach-data` in your training workspace. `profile.md`
 keeps your goals, preferences, self-reported strong/weak topics and demonstrated
 strengths with supporting evidence. `plan.md` keeps the
 current workload and a short session handoff. `progress.json` keeps attempts,
-hints, reviews, mastery evidence and the unfinished question.
+hints, reviews, mastery evidence, video recommendations, coaching decisions and
+the unfinished question. The coach decides whether to stay, advance or review
+a prerequisite, supported by independent attempts and understanding checks.
 
 A new chat reads a compact summary and continues from the saved next step. It
 does not load the entire history into context or replace your plan on each run.
@@ -89,12 +94,14 @@ identity of its client. Railway proxy setup and API contracts live in
 to guidance as needed. [WORKFLOW.md](skills/voidhub-cp-coach/WORKFLOW.md) describes
 sessions and archive access. [COACHING.md](skills/voidhub-cp-coach/COACHING.md)
 covers hints and reviews. [CURRICULUM.md](skills/voidhub-cp-coach/CURRICULUM.md)
-defines thirteen topics and their stages. [PROBLEMS.md](skills/voidhub-cp-coach/PROBLEMS.md)
+defines the topic tracks and stages. [PROBLEMS.md](skills/voidhub-cp-coach/PROBLEMS.md)
 governs question selection and presentation. [MEMORY.md](skills/voidhub-cp-coach/MEMORY.md)
 defines learner memory and its commands.
 
 Three Python helpers handle archive access, progress and credential setup.
 `agents/openai.yaml` supplies display metadata, and `progress.schema.json`
-describes the saved state. Behavioral and script tests remain under `tests/`.
-The curriculum covers beginner-to-intermediate preparation; advanced topics are
-outside this first version.
+describes the saved state. [RESOURCES.md](skills/voidhub-cp-coach/RESOURCES.md)
+governs video selection, and `curriculum.json` defines coverage and dependencies.
+Behavioral and script tests remain under `tests/`. The catalog covers the
+requested route's topics; suitable CPC questions and teaching resources still
+need verification for each lesson. Educational quality requires session review.

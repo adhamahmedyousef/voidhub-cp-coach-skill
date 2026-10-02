@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import tempfile
 import os
+import re
 
 from archive_client import ClientError, atomic_json, locked, summary_valid
 
@@ -29,7 +30,7 @@ FAILURES = (
     "debugging",
     "time_management",
 )
-TOPICS = (
+LEGACY_TOPICS = (
     "implementation",
     "arrays_strings",
     "sorting_frequency",
@@ -44,6 +45,9 @@ TOPICS = (
     "dijkstra",
     "dp",
 )
+CURRICULUM = json.loads((SKILL_DIR / "curriculum.json").read_text(encoding="utf-8"))
+TOPICS = tuple(CURRICULUM)
+CHECKS = ("understanding", "complexity", "coverage", "prerequisites")
 
 
 class StoreError(Exception):
@@ -58,6 +62,112 @@ def exact(value, keys):
 def text(value, maximum=5000):
     if not isinstance(value, str) or not value.strip() or len(value) > maximum:
         raise StoreError("Expected bounded nonempty text.")
+
+
+def resource_valid(value):
+    exact(
+        value,
+        (
+            "topic",
+            "title",
+            "channel",
+            "url",
+            "language",
+            "level",
+            "purpose",
+            "verification",
+            "verified_at",
+            "status",
+            "duration_seconds",
+            "start_seconds",
+        ),
+    )
+    if value["topic"] not in TOPICS:
+        raise StoreError("Unknown resource topic.")
+    for field, maximum in (
+        ("title", 250),
+        ("channel", 120),
+        ("language", 40),
+        ("purpose", 1200),
+    ):
+        text(value[field], maximum)
+    if not isinstance(value["url"], str) or not re.fullmatch(
+        r"https://(?:www\.)?youtube\.com/watch\?v=[A-Za-z0-9_-]{11}", value["url"]
+    ):
+        raise StoreError("Expected a verified canonical YouTube video URL.")
+    if value["level"] not in ("beginner", "intermediate", "advanced") or value[
+        "status"
+    ] not in ("suggested", "watched", "skipped"):
+        raise StoreError("Invalid resource level/status.")
+    if value["verification"] not in ("metadata", "description", "transcript_excerpt"):
+        raise StoreError(
+            "State what was actually inspected, not assumed video content."
+        )
+    try:
+        date.fromisoformat(value["verified_at"])
+    except (TypeError, ValueError):
+        raise StoreError("Invalid resource verification date.") from None
+    for field in ("duration_seconds", "start_seconds"):
+        if value[field] is not None and (
+            type(value[field]) is not int or value[field] < 0
+        ):
+            raise StoreError("Invalid video duration/timestamp.")
+    if (
+        value["duration_seconds"] is not None
+        and value["start_seconds"] is not None
+        and value["start_seconds"] > value["duration_seconds"]
+    ):
+        raise StoreError("Video timestamp exceeds duration.")
+
+
+def decision_valid(value):
+    exact(
+        value,
+        (
+            "topic",
+            "stage",
+            "action",
+            "target_topic",
+            "target_stage",
+            "checks",
+            "reason",
+        ),
+    )
+    for topic_field, stage_field in (
+        ("topic", "stage"),
+        ("target_topic", "target_stage"),
+    ):
+        if (
+            value[topic_field] not in TOPICS
+            or type(value[stage_field]) is not int
+            or value[stage_field] not in (1, 2, 3)
+        ):
+            raise StoreError("Invalid transition topic/stage.")
+    if value["action"] not in ("continue", "advance", "review_prerequisite"):
+        raise StoreError("Invalid coaching decision.")
+    exact(value["checks"], CHECKS)
+    if any(type(item) is not bool for item in value["checks"].values()):
+        raise StoreError("Decision checks must be explicit booleans.")
+    text(value["reason"], 1500)
+    if value["action"] == "advance":
+        if value["target_topic"] == value["topic"]:
+            if value["stage"] == 3 or value["target_stage"] != value["stage"] + 1:
+                raise StoreError("Advance one stage at a time.")
+        elif value["stage"] != 3 or value["target_stage"] != 1:
+            raise StoreError("Complete the topic before moving to another topic.")
+    elif value["action"] == "continue":
+        if (value["target_topic"], value["target_stage"]) != (
+            value["topic"],
+            value["stage"],
+        ):
+            raise StoreError("Continue must retain the same topic and stage.")
+    elif (
+        value["target_topic"] not in CURRICULUM[value["topic"]]["prerequisites"]
+        or value["target_stage"] != 1
+    ):
+        raise StoreError(
+            "Choose direct application of an actual prerequisite for review."
+        )
 
 
 def context(value):
@@ -77,9 +187,9 @@ def context(value):
         raise StoreError("Invalid training mode/assistance.")
 
 
-def compute_mastery(problems):
+def compute_mastery(problems, topics=TOPICS):
     mastery = {}
-    for topic in TOPICS:
+    for topic in topics:
         stages = {}
         for stage in (1, 2, 3):
             independent, transfer = set(), set()
@@ -111,6 +221,9 @@ def compute_mastery(problems):
 
 
 def validate(state):
+    version = state.get("schema_version") if isinstance(state, dict) else None
+    if type(version) is not int or version not in (1, 2):
+        raise StoreError("Unsupported state version; preserved without migration.")
     exact(
         state,
         (
@@ -120,10 +233,9 @@ def validate(state):
             "problems",
             "mastery",
             "next_step",
-        ),
+        )
+        + (("learning",) if version == 2 else ()),
     )
-    if type(state["schema_version"]) is not int or state["schema_version"] != 1:
-        raise StoreError("Unsupported state version; preserved without migration.")
     if (
         type(state["revision"]) is not int
         or state["revision"] < 0
@@ -159,6 +271,8 @@ def validate(state):
                 ),
             )
             context(attempt)
+            if version == 1 and attempt["topic"] not in LEGACY_TOPICS:
+                raise StoreError("Topic is incompatible with legacy state.")
             if (
                 attempt["result"] not in RESULTS
                 or attempt["failure"] is not None
@@ -182,13 +296,58 @@ def validate(state):
             current, ("key", "topic", "stage", "mode", "assistance", "first_exposure")
         )
         context(current)
+        if version == 1 and current["topic"] not in LEGACY_TOPICS:
+            raise StoreError("Topic is incompatible with legacy state.")
         if (
             current["key"] not in state["problems"]
             or type(current["first_exposure"]) is not bool
         ):
             raise StoreError("Invalid current problem.")
-    if state["mastery"] != compute_mastery(state["problems"]):
+    topics = LEGACY_TOPICS if version == 1 else TOPICS
+    if state["mastery"] != compute_mastery(state["problems"], topics):
         raise StoreError("Mastery must match recorded evidence; state preserved.")
+    if version == 2:
+        learning = state["learning"]
+        exact(learning, ("resources", "decisions"))
+        if not isinstance(learning["resources"], list) or not isinstance(
+            learning["decisions"], list
+        ):
+            raise StoreError("Invalid learning records.")
+        for resource in learning["resources"]:
+            resource_valid(resource)
+        for record in learning["decisions"]:
+            exact(
+                record, ("recorded_at", "decision", "independent_ids", "transfer_ids")
+            )
+            decision_valid(record["decision"])
+            try:
+                datetime.fromisoformat(record["recorded_at"])
+            except (TypeError, ValueError):
+                raise StoreError("Invalid decision date.") from None
+            for field in ("independent_ids", "transfer_ids"):
+                if not isinstance(record[field], list) or any(
+                    key not in state["problems"] for key in record[field]
+                ):
+                    raise StoreError("Invalid decision evidence identity.")
+            if record["decision"]["action"] == "advance":
+                d = record["decision"]
+                eligible = compute_mastery(state["problems"])[d["topic"]]["stages"][
+                    str(d["stage"])
+                ]
+                if (
+                    not all(d["checks"].values())
+                    or len(set(record["independent_ids"])) < 3
+                    or not record["transfer_ids"]
+                ):
+                    raise StoreError(
+                        "Advance decision lacks independent evidence/checks."
+                    )
+                if not set(record["independent_ids"]) <= set(
+                    eligible["independent_ids"]
+                ) or not set(record["transfer_ids"]) <= set(eligible["transfer_ids"]):
+                    raise StoreError(
+                        "Advance evidence does not match recorded attempts."
+                    )
     return state
 
 
@@ -208,7 +367,7 @@ class ProgressStore:
         try:
             if self.path.stat().st_size > 8 * 1024 * 1024:
                 raise StoreError(
-                    "Progress exceeds the v1 size limit; archive history deliberately."
+                    "Progress exceeds the state size limit; archive history deliberately."
                 )
             return validate(json.loads(self.path.read_text(encoding="utf-8")))
         except (OSError, ValueError, TypeError, KeyError) as exc:
@@ -221,12 +380,13 @@ class ProgressStore:
             if self.path.exists():
                 return self.read()
             state = {
-                "schema_version": 1,
+                "schema_version": 2,
                 "revision": 0,
                 "current_problem": None,
                 "problems": {},
                 "mastery": compute_mastery({}),
                 "next_step": "Collect learner profile, then start three-problem diagnosis.",
+                "learning": {"resources": [], "decisions": []},
             }
             atomic_json(self.path, validate(state))
             for name, content in (
@@ -318,21 +478,103 @@ class ProgressStore:
             "scheduled_reviews": reviews[:10],
             "scheduled_review_count": len(reviews),
             "history_file": str(self.path),
+            "latest_decision": state.get("learning", {}).get("decisions", [])[-1:]
+            or [],
+            "recent_resources": state.get("learning", {}).get("resources", [])[-2:],
         }
+
+    def _upgrade(self, state):
+        if state["schema_version"] == 2:
+            return state
+        backup = self.directory / "progress.v1.backup.json"
+        if backup.is_symlink():
+            raise StoreError("Legacy backup cannot be a symlink.")
+        if backup.exists():
+            if json.loads(backup.read_text(encoding="utf-8")) != state:
+                raise StoreError(
+                    "Existing v1 backup differs; original state preserved."
+                )
+        else:
+            atomic_json(backup, state)
+        return {
+            **state,
+            "schema_version": 2,
+            "mastery": compute_mastery(state["problems"]),
+            "learning": {"resources": [], "decisions": []},
+        }
+
+    def upgrade(self):
+        return self._mutate(lambda state: None)
 
     def _mutate(self, operation):
         with locked(self.directory / ".progress.lock"):
-            state = self.read()
+            state = self._upgrade(self.read())
             operation(state)
             state["revision"] += 1
             state["mastery"] = compute_mastery(state["problems"])
             validate(state)
             if len(json.dumps(state, ensure_ascii=False).encode()) > 8 * 1024 * 1024:
                 raise StoreError(
-                    "Progress exceeds the v1 size limit; no history was overwritten."
+                    "Progress exceeds the state size limit; no history was overwritten."
                 )
             atomic_json(self.path, state)
             return state
+
+    def resource(self, payload):
+        resource_valid(payload)
+
+        def change(state):
+            resources = state["learning"]["resources"]
+            for index, item in enumerate(resources):
+                if (item["topic"], item["url"]) == (payload["topic"], payload["url"]):
+                    resources.pop(index)
+                    resources.append(payload)
+                    return
+            resources.append(payload)
+
+        return self._mutate(change)
+
+    def decision(self, payload):
+        decision_valid(payload)
+
+        def change(state):
+            if payload["action"] == "advance":
+                if state["current_problem"] is not None:
+                    raise StoreError(
+                        "Finish or record the active problem before advancing."
+                    )
+                topic, stage = payload["topic"], payload["stage"]
+                mastery = state["mastery"][topic]
+                if mastery["completed_stage"] < stage or not all(
+                    payload["checks"].values()
+                ):
+                    raise StoreError(
+                        "Stay on this topic: independent evidence or understanding checks are missing."
+                    )
+                prerequisites = CURRICULUM[payload["target_topic"]]["prerequisites"]
+                if any(
+                    state["mastery"][name]["completed_stage"] < 1
+                    for name in prerequisites
+                ):
+                    raise StoreError(
+                        "Review missing prerequisites before advancing to the target topic."
+                    )
+            evidence = state["mastery"][payload["topic"]]["stages"][
+                str(payload["stage"])
+            ]
+            state["learning"]["decisions"].append(
+                {
+                    "recorded_at": datetime.now(timezone.utc).isoformat(),
+                    "decision": payload,
+                    "independent_ids": evidence["independent_ids"],
+                    "transfer_ids": evidence["transfer_ids"],
+                }
+            )
+            state["next_step"] = (
+                f"{payload['action']}: {payload['target_topic']} stage {payload['target_stage']}. {payload['reason']}"
+            )
+
+        return self._mutate(change)
 
     def assign(self, payload):
         exact(payload, ("problem", "topic", "stage", "mode"))
@@ -467,6 +709,9 @@ def main():
             "next",
             "profile",
             "plan",
+            "resource",
+            "decision",
+            "upgrade",
         ),
     )
     parser.add_argument(
@@ -483,13 +728,20 @@ def main():
     args = parser.parse_args()
     try:
         store = ProgressStore(args.data_dir)
-        if args.operation in ("assign", "record", "profile", "plan"):
+        if args.operation in (
+            "assign",
+            "record",
+            "resource",
+            "decision",
+            "profile",
+            "plan",
+        ):
             if not args.input:
                 raise StoreError("--input is required.")
             raw = Path(args.input).read_text(encoding="utf-8")
             result = (
                 getattr(store, args.operation)(json.loads(raw))
-                if args.operation in ("assign", "record")
+                if args.operation in ("assign", "record", "resource", "decision")
                 else store.write_notes(args.operation + ".md", raw)
             )
         elif args.operation == "hint":
@@ -498,6 +750,8 @@ def main():
             result = store.set_next(args.text)
         elif args.operation == "resume":
             result = store.resume()
+        elif args.operation == "upgrade":
+            result = store.upgrade()
         else:
             result = store.init() if args.operation == "init" else store.read()
         if (

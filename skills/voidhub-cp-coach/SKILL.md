@@ -1,6 +1,6 @@
 ---
 name: voidhub-cp-coach
-description: Persistent beginner-to-intermediate competitive programming coaching using real CPC problems from VoidHub. Use for CP training, ECPC/ACPC preparation, topic practice, progressive hints, attempt reviews, weekly plans, and resuming tracked training. It does not administer contests or submit code.
+description: Persistent competitive programming coaching from foundations to advanced topics using real CPC problems from VoidHub. Use for CP training, ECPC/ACPC preparation, topic practice, verified YouTube explanations, progressive hints, reviews, weekly plans, and resuming tracked training. It does not submit code.
 ---
 
 # VoidHub CP Coach
@@ -60,7 +60,13 @@ Do not generate multiple plans or speculative solutions when one is enough.
 - Record assistance through the store before providing it. Full solutions are
   allowed only on an explicit learner request and count as assisted work.
 - Read [CURRICULUM.md](CURRICULUM.md) for prerequisites and stage
-  selection. Its stages are educational estimates, not official problem ratings.
+  selection. Use `curriculum.json` for the relevant topic's coverage and
+  dependencies. Decide whether to continue, advance or revisit a prerequisite;
+  save the decision before announcing it. Counts alone do not establish readiness.
+- Read [RESOURCES.md](RESOURCES.md) when recommending a YouTube explanation.
+  Match language, current knowledge and the demonstrated gap. Verify and save
+  the link; viewing does not establish mastery. Record assistance if the video
+  reveals an observation or algorithm for the active question.
 - Read [PROBLEMS.md](PROBLEMS.md) before selecting
   or presenting a question. Always name its contest and include its VoidHub URL.
   Show the trained topic in topic mode; hide it in diagnosis/mixed mode.

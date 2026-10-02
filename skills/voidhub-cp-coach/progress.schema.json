@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "VoidHub CP Coach progress v1",
+  "title": "VoidHub CP Coach progress v2",
   "type": "object",
   "properties": {
     "schema_version": {
-      "const": 1
+      "const": 2
     },
     "revision": {
       "type": "integer",
@@ -19,21 +19,7 @@
           "type": "object",
           "properties": {
             "topic": {
-              "enum": [
-                "implementation",
-                "arrays_strings",
-                "sorting_frequency",
-                "math",
-                "prefix_sums",
-                "two_pointers",
-                "binary_search",
-                "greedy",
-                "backtracking",
-                "bfs_dfs",
-                "dsu",
-                "dijkstra",
-                "dp"
-              ]
+              "$ref": "#/$defs/topic_id"
             },
             "stage": {
               "enum": [
@@ -106,46 +92,11 @@
     },
     "mastery": {
       "type": "object",
-      "properties": {
-        "implementation": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "arrays_strings": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "sorting_frequency": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "math": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "prefix_sums": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "two_pointers": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "binary_search": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "greedy": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "backtracking": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "bfs_dfs": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "dsu": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "dijkstra": {
-          "$ref": "#/$defs/topic_mastery"
-        },
-        "dp": {
-          "$ref": "#/$defs/topic_mastery"
-        }
+      "propertyNames": {
+        "$ref": "#/$defs/topic_id"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/topic_mastery"
       },
       "required": [
         "implementation",
@@ -160,14 +111,60 @@
         "bfs_dfs",
         "dsu",
         "dijkstra",
-        "dp"
-      ],
-      "additionalProperties": false
+        "dp",
+        "number_theory",
+        "counting",
+        "bitwise",
+        "monotonic_stack",
+        "recursion",
+        "topological_sort",
+        "fenwick",
+        "sparse_table",
+        "segment_tree",
+        "merge_sort_tree",
+        "lazy_segment_tree",
+        "dp_ranges",
+        "digit_dp",
+        "bitmask_dp",
+        "rollback_dsu",
+        "mst",
+        "euler_tour",
+        "lca",
+        "dsu_on_tree",
+        "kmp",
+        "z_algorithm",
+        "trie",
+        "binary_trie",
+        "hashing",
+        "dynamic_hashing"
+      ]
     },
     "next_step": {
       "type": "string",
       "minLength": 1,
       "maxLength": 5000
+    },
+    "learning": {
+      "type": "object",
+      "properties": {
+        "resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource"
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decision_record"
+          }
+        }
+      },
+      "required": [
+        "resources",
+        "decisions"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [
@@ -176,7 +173,8 @@
     "current_problem",
     "problems",
     "mastery",
-    "next_step"
+    "next_step",
+    "learning"
   ],
   "additionalProperties": false,
   "$defs": {
@@ -258,21 +256,7 @@
       "type": "object",
       "properties": {
         "topic": {
-          "enum": [
-            "implementation",
-            "arrays_strings",
-            "sorting_frequency",
-            "math",
-            "prefix_sums",
-            "two_pointers",
-            "binary_search",
-            "greedy",
-            "backtracking",
-            "bfs_dfs",
-            "dsu",
-            "dijkstra",
-            "dp"
-          ]
+          "$ref": "#/$defs/topic_id"
         },
         "stage": {
           "enum": [
@@ -425,6 +409,240 @@
         "stages"
       ],
       "additionalProperties": false
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "$ref": "#/$defs/topic_id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://(www\\.)?youtube\\.com/watch\\?v=[A-Za-z0-9_-]{11}$"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "level": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200
+        },
+        "verification": {
+          "enum": [
+            "metadata",
+            "description",
+            "transcript_excerpt"
+          ]
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "enum": [
+            "suggested",
+            "watched",
+            "skipped"
+          ]
+        },
+        "duration_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "start_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "topic",
+        "title",
+        "channel",
+        "url",
+        "language",
+        "level",
+        "purpose",
+        "verification",
+        "verified_at",
+        "status",
+        "duration_seconds",
+        "start_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "$ref": "#/$defs/topic_id"
+        },
+        "stage": {
+          "enum": [
+            1,
+            2,
+            3
+          ]
+        },
+        "action": {
+          "enum": [
+            "continue",
+            "advance",
+            "review_prerequisite"
+          ]
+        },
+        "target_topic": {
+          "$ref": "#/$defs/topic_id"
+        },
+        "target_stage": {
+          "enum": [
+            1,
+            2,
+            3
+          ]
+        },
+        "checks": {
+          "type": "object",
+          "properties": {
+            "understanding": {
+              "type": "boolean"
+            },
+            "complexity": {
+              "type": "boolean"
+            },
+            "coverage": {
+              "type": "boolean"
+            },
+            "prerequisites": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "understanding",
+            "complexity",
+            "coverage",
+            "prerequisites"
+          ],
+          "additionalProperties": false
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        }
+      },
+      "required": [
+        "topic",
+        "stage",
+        "action",
+        "target_topic",
+        "target_stage",
+        "checks",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "decision_record": {
+      "type": "object",
+      "properties": {
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "independent_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^voidhub:[a-f0-9]{32}$"
+          },
+          "uniqueItems": true
+        },
+        "transfer_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^voidhub:[a-f0-9]{32}$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "recorded_at",
+        "decision",
+        "independent_ids",
+        "transfer_ids"
+      ],
+      "additionalProperties": false
+    },
+    "topic_id": {
+      "enum": [
+        "implementation",
+        "arrays_strings",
+        "sorting_frequency",
+        "math",
+        "prefix_sums",
+        "two_pointers",
+        "binary_search",
+        "greedy",
+        "backtracking",
+        "bfs_dfs",
+        "dsu",
+        "dijkstra",
+        "dp",
+        "number_theory",
+        "counting",
+        "bitwise",
+        "monotonic_stack",
+        "recursion",
+        "topological_sort",
+        "fenwick",
+        "sparse_table",
+        "segment_tree",
+        "merge_sort_tree",
+        "lazy_segment_tree",
+        "dp_ranges",
+        "digit_dp",
+        "bitmask_dp",
+        "rollback_dsu",
+        "mst",
+        "euler_tour",
+        "lca",
+        "dsu_on_tree",
+        "kmp",
+        "z_algorithm",
+        "trie",
+        "binary_trie",
+        "hashing",
+        "dynamic_hashing"
+      ]
     }
   }
 }

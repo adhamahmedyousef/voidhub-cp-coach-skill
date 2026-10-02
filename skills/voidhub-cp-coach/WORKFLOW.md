@@ -41,11 +41,15 @@ context. Keep untested self-reports separate from demonstrated ability.
    decisive evidence; never silently manufacture an acceptance.
 5. Record the attempt. Write an explicit review date for assisted work (normally
    3–7 days, adapted to availability). The store clears the active question.
-6. Check computed mastery eligibility; adapt training, update the weekly plan
+6. Check computed mastery eligibility and the learner's explanation, complexity,
+   covered subtopics and prerequisites. Record continue/advance/review_prerequisite
+   through the store before announcing the decision. Choose one concrete next
+   task; when teaching is needed, select a video through RESOURCES.md and check
+   understanding after viewing. Adapt training, update the weekly plan
    and store a concrete next step. Three distinct independent successes including
    an unseen transfer task are required per stage; later stages cannot bypass
    earlier requirements. Eligibility is evidence for the coach, not an automatic
-   certificate. Do not label advanced contest readiness from this v1 curriculum.
+   certificate. Advanced topic tracking does not certify contest readiness.
 
 ## Weekly review
 

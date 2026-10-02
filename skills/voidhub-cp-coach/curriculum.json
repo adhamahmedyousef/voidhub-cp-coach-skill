@@ -1,0 +1,321 @@
+{
+  "implementation": {
+    "title": "Implementation",
+    "track": "Foundations",
+    "prerequisites": [],
+    "coverage": "Tracing, conditions, loops and simulation"
+  },
+  "arrays_strings": {
+    "title": "Arrays and strings",
+    "track": "Foundations",
+    "prerequisites": [
+      "implementation"
+    ],
+    "coverage": "Indexing, representation and traversal"
+  },
+  "sorting_frequency": {
+    "title": "Sorting and frequency",
+    "track": "Foundations",
+    "prerequisites": [
+      "arrays_strings"
+    ],
+    "coverage": "Frequency arrays, ordering, custom comparators"
+  },
+  "math": {
+    "title": "Basic mathematical reasoning",
+    "track": "Foundations",
+    "prerequisites": [
+      "implementation"
+    ],
+    "coverage": "Parity, divisibility and invariants"
+  },
+  "prefix_sums": {
+    "title": "Prefix sums and differences",
+    "track": "Data techniques",
+    "prerequisites": [
+      "arrays_strings"
+    ],
+    "coverage": "Prefix/suffix, difference arrays and 2D sums"
+  },
+  "two_pointers": {
+    "title": "Two pointers and windows",
+    "track": "Data techniques",
+    "prerequisites": [
+      "arrays_strings",
+      "sorting_frequency"
+    ],
+    "coverage": "Pointer invariants, fixed/variable windows"
+  },
+  "binary_search": {
+    "title": "Binary search",
+    "track": "Reasoning",
+    "prerequisites": [
+      "sorting_frequency"
+    ],
+    "coverage": "Ordered search, monotone predicates, answer search"
+  },
+  "greedy": {
+    "title": "Greedy reasoning",
+    "track": "Reasoning",
+    "prerequisites": [
+      "sorting_frequency"
+    ],
+    "coverage": "Exchange arguments and counterexamples"
+  },
+  "backtracking": {
+    "title": "Backtracking",
+    "track": "Search",
+    "prerequisites": [
+      "recursion"
+    ],
+    "coverage": "Enumeration, pruning and undoing state"
+  },
+  "bfs_dfs": {
+    "title": "Graph traversal",
+    "track": "Graphs",
+    "prerequisites": [
+      "arrays_strings",
+      "recursion"
+    ],
+    "coverage": "Flood fill, components, bipartiteness, unweighted and multisource BFS"
+  },
+  "dsu": {
+    "title": "Disjoint set union",
+    "track": "Graphs",
+    "prerequisites": [
+      "bfs_dfs"
+    ],
+    "coverage": "Connectivity, path compression and union by size"
+  },
+  "dijkstra": {
+    "title": "Dijkstra",
+    "track": "Graphs",
+    "prerequisites": [
+      "bfs_dfs"
+    ],
+    "coverage": "Nonnegative weighted paths, priority queues and modelling"
+  },
+  "dp": {
+    "title": "Dynamic programming foundations",
+    "track": "Dynamic programming",
+    "prerequisites": [
+      "recursion"
+    ],
+    "coverage": "States, transitions, base cases, simple grid and knapsack"
+  },
+  "number_theory": {
+    "title": "Elementary number theory",
+    "track": "Reasoning",
+    "prerequisites": [
+      "math"
+    ],
+    "coverage": "GCD/LCM, primes, sieve, factorization, modular arithmetic and inverses"
+  },
+  "counting": {
+    "title": "Counting and combinatorics",
+    "track": "Reasoning",
+    "prerequisites": [
+      "number_theory"
+    ],
+    "coverage": "Sum/product rules, combinations, permutations and modular counting"
+  },
+  "bitwise": {
+    "title": "Bit operations and masks",
+    "track": "Reasoning",
+    "prerequisites": [
+      "math"
+    ],
+    "coverage": "Binary representation, shifts, set tests and subset enumeration"
+  },
+  "monotonic_stack": {
+    "title": "Monotonic stacks and queues",
+    "track": "Data techniques",
+    "prerequisites": [
+      "arrays_strings"
+    ],
+    "coverage": "Nearest greater/smaller, amortized analysis and sliding extrema"
+  },
+  "recursion": {
+    "title": "Recursion",
+    "track": "Search",
+    "prerequisites": [
+      "implementation"
+    ],
+    "coverage": "Call stack, base cases, recurrence and divide-and-conquer"
+  },
+  "topological_sort": {
+    "title": "DAGs and topological ordering",
+    "track": "Graphs",
+    "prerequisites": [
+      "bfs_dfs"
+    ],
+    "coverage": "Dependencies, Kahn/DFS ordering and cycle detection"
+  },
+  "fenwick": {
+    "title": "Fenwick tree",
+    "track": "Range queries",
+    "prerequisites": [
+      "prefix_sums",
+      "bitwise"
+    ],
+    "coverage": "Point updates, prefix/range queries and indexing invariants"
+  },
+  "sparse_table": {
+    "title": "Sparse table",
+    "track": "Range queries",
+    "prerequisites": [
+      "prefix_sums",
+      "bitwise"
+    ],
+    "coverage": "Static idempotent queries and overlapping blocks"
+  },
+  "segment_tree": {
+    "title": "Segment tree",
+    "track": "Range queries",
+    "prerequisites": [
+      "recursion",
+      "prefix_sums"
+    ],
+    "coverage": "Merge identity, build, point update and interval query"
+  },
+  "merge_sort_tree": {
+    "title": "Merge sort tree",
+    "track": "Range queries",
+    "prerequisites": [
+      "segment_tree",
+      "binary_search"
+    ],
+    "coverage": "Sorted node vectors and static range counting"
+  },
+  "lazy_segment_tree": {
+    "title": "Lazy propagation",
+    "track": "Range queries",
+    "prerequisites": [
+      "segment_tree"
+    ],
+    "coverage": "Range operations, tag composition and push/pull invariants"
+  },
+  "dp_ranges": {
+    "title": "DP with range optimization",
+    "track": "Dynamic programming",
+    "prerequisites": [
+      "dp",
+      "segment_tree"
+    ],
+    "coverage": "Range transitions; use proven structure rather than assumed optimization"
+  },
+  "digit_dp": {
+    "title": "Digit DP",
+    "track": "Dynamic programming",
+    "prerequisites": [
+      "dp",
+      "number_theory"
+    ],
+    "coverage": "Position, tightness, leading zero and range subtraction"
+  },
+  "bitmask_dp": {
+    "title": "Bitmask DP",
+    "track": "Dynamic programming",
+    "prerequisites": [
+      "dp",
+      "bitwise"
+    ],
+    "coverage": "Subset states, transitions and exponential bounds"
+  },
+  "rollback_dsu": {
+    "title": "Rollback DSU",
+    "track": "Advanced connectivity",
+    "prerequisites": [
+      "dsu"
+    ],
+    "coverage": "Change stack, snapshots and offline dynamic connectivity; no unsafe path compression"
+  },
+  "mst": {
+    "title": "Minimum spanning tree",
+    "track": "Advanced connectivity",
+    "prerequisites": [
+      "dsu",
+      "greedy"
+    ],
+    "coverage": "Kruskal/Prim, cut property and disconnected graphs"
+  },
+  "euler_tour": {
+    "title": "Euler tour and tree flattening",
+    "track": "Trees",
+    "prerequisites": [
+      "bfs_dfs",
+      "prefix_sums"
+    ],
+    "coverage": "Entry/exit intervals, subtree ranges and DFS representation"
+  },
+  "lca": {
+    "title": "LCA and binary lifting",
+    "track": "Trees",
+    "prerequisites": [
+      "euler_tour",
+      "bitwise"
+    ],
+    "coverage": "Ancestor jumps, depth alignment and path queries"
+  },
+  "dsu_on_tree": {
+    "title": "Small-to-large and DSU on tree",
+    "track": "Trees",
+    "prerequisites": [
+      "euler_tour",
+      "sorting_frequency"
+    ],
+    "coverage": "Merge-size argument, sack retention and clearing"
+  },
+  "kmp": {
+    "title": "KMP and prefix-function automata",
+    "track": "Strings",
+    "prerequisites": [
+      "arrays_strings",
+      "dp"
+    ],
+    "coverage": "Prefix function, fallback links, matching and automaton DP"
+  },
+  "z_algorithm": {
+    "title": "Z algorithm",
+    "track": "Strings",
+    "prerequisites": [
+      "arrays_strings"
+    ],
+    "coverage": "Z-box invariant, matching and borders"
+  },
+  "trie": {
+    "title": "Trie",
+    "track": "Strings",
+    "prerequisites": [
+      "arrays_strings"
+    ],
+    "coverage": "Prefix representation, insert/query and memory bounds"
+  },
+  "binary_trie": {
+    "title": "Binary trie",
+    "track": "Strings",
+    "prerequisites": [
+      "trie",
+      "bitwise"
+    ],
+    "coverage": "Bitwise traversal and XOR queries"
+  },
+  "hashing": {
+    "title": "String hashing",
+    "track": "Strings",
+    "prerequisites": [
+      "arrays_strings",
+      "number_theory"
+    ],
+    "coverage": "Substring normalization and probabilistic collision limits"
+  },
+  "dynamic_hashing": {
+    "title": "Dynamic hashing",
+    "track": "Strings",
+    "prerequisites": [
+      "hashing",
+      "segment_tree"
+    ],
+    "coverage": "Maintain hash merges under updates; preserve collision caveats"
+  }
+}
