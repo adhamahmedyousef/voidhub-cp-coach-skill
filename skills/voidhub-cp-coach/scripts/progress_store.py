@@ -15,6 +15,7 @@ ASSISTANCE = ("none", "clarification", "observation", "algorithm", "full_solutio
 RESULTS = (
     "accepted_reported",
     "verified_correct",
+    "solution_viewed",
     "wrong",
     "timeout",
     "unsolved",
@@ -280,6 +281,10 @@ def validate(state):
                 or type(attempt["transfer"]) is not bool
             ):
                 raise StoreError("Invalid attempt result/evidence.")
+            if attempt["result"] == "solution_viewed" and (
+                attempt["assistance"] != "full_solution" or attempt["transfer"]
+            ):
+                raise StoreError("Invalid solution-viewing evidence.")
             text(attempt["session_id"], 120)
             text(attempt["evidence"])
             try:
@@ -651,6 +656,19 @@ class ProgressStore:
             level = max(
                 (current["assistance"], payload["assistance"]), key=ASSISTANCE.index
             )
+            if level == "full_solution" and payload["result"] in (
+                "accepted_reported",
+                "verified_correct",
+            ):
+                raise StoreError(
+                    "After a full solution, record solution_viewed, not a solve."
+                )
+            if payload["result"] == "solution_viewed" and (
+                level != "full_solution" or payload["transfer"]
+            ):
+                raise StoreError(
+                    "Solution viewing requires full_solution and no transfer credit."
+                )
             attempt = {
                 **payload,
                 "recorded_at": datetime.now(timezone.utc).isoformat(),

@@ -73,7 +73,10 @@ Assignment JSON has exactly `problem` (the six-field API summary), `topic`
 Attempt JSON has exactly `session_id`, `result`, `assistance`, `failure`,
 `transfer` (boolean), `evidence` (nonempty observed basis), `revisit_on` (ISO date
 or null). Use a stable session ID per conversation/training session. Results:
-accepted_reported, verified_correct, wrong, timeout, unsolved, abandoned.
+accepted_reported, verified_correct, solution_viewed, wrong, timeout, unsolved, abandoned.
+After delivering a full solution use solution_viewed with full_solution assistance,
+transfer false and a review date. Do not turn viewing or copied-code acceptance
+into a solve. Later independent work belongs to a separate review attempt.
 Assistance: none, clarification, observation, algorithm, full_solution.
 Failure: null or statement, recognition, proof, knowledge, complexity,
 implementation, debugging, time_management. Assisted attempts require a date.

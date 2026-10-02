@@ -294,6 +294,7 @@
         "result": {
           "enum": [
             "accepted_reported",
+            "solution_viewed",
             "verified_correct",
             "wrong",
             "timeout",

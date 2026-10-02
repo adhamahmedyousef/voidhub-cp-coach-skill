@@ -58,7 +58,9 @@ Do not generate multiple plans or speculative solutions when one is enough.
   Do not volunteer tags, observations, editorials or solutions during an attempt.
   Give progressive help only when asked, or teach a gap after the learner agrees.
 - Record assistance through the store before providing it. Full solutions are
-  allowed only on an explicit learner request and count as assisted work.
+  allowed only on an explicit learner request. Offer hints once first; if the
+  learner insists or explicitly declines hints, provide the solution. Record
+  delivery as `solution_viewed`, never a solved question or mastery credit.
 - Read [CURRICULUM.md](CURRICULUM.md) for prerequisites and stage
   selection. Use `curriculum.json` for the relevant topic's coverage and
   dependencies. Decide whether to continue, advance or revisit a prerequisite;

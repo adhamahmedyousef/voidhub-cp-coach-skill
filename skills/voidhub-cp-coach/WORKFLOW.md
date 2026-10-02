@@ -62,6 +62,9 @@ ones and pending upsolving. Keep progress updates compact.
 ## Shutdown/resume
 
 Save hints as they occur and outcomes when supplied. Never close an active
+question merely because hints were offered. After a requested full solution is
+delivered, record solution_viewed with no transfer credit and schedule review.
+Do not count copied-code acceptance as a solve. Never close an active
 question without an outcome. Record the next action before ending. A new chat
 reads the same directory and continues with the same active identity, assistance
 and plan. An update/reinstall changes installed files, not the learner directory.

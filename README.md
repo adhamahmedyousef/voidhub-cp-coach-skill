@@ -16,8 +16,9 @@ queries, tree methods, DP and string algorithms.
 The coach keeps replies brief and gives you room to think. It recommends a
 verified YouTube explanation when it fits your language, knowledge and current
 gap. Hints come when you
-ask, one step at a time. A complete solution requires an explicit request and is
-recorded as assistance. Reviews use your reasoning, code and actual outcome to
+ask, one step at a time. When you request a complete solution, the coach offers
+hints first. If you decline, it provides the solution and records it as viewed,
+with no solved-question or mastery credit. Reviews use your reasoning, code and actual outcome to
 choose the next step; they do not treat a few passing examples as proof.
 
 Every practice question includes its title, contest, VoidHub difficulty,

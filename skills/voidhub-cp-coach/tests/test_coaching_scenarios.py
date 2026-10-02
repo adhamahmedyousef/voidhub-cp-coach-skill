@@ -14,7 +14,7 @@ from test_archive_client import (
     summary,
 )
 from test_progress_store import assignment, outcome
-from progress_store import ProgressStore
+from progress_store import ProgressStore, StoreError
 
 
 class SessionScenarios(unittest.TestCase):
@@ -67,10 +67,45 @@ class SessionScenarios(unittest.TestCase):
     def test_explicit_full_solution_never_counts_as_independent(self):
         self.store.assign(assignment())
         self.store.hint("full_solution")
-        state = self.store.record(outcome(review="2026-10-08"))
+        viewed = outcome(review="2026-10-08", result="solution_viewed", transfer=False)
+        viewed["evidence"] = (
+            "Complete solution delivered; no independent learner attempt."
+        )
+        state = self.store.record(viewed)
         self.assertEqual(
             state["mastery"]["implementation"]["stages"]["1"]["independent_ids"], []
         )
+        attempt = next(iter(state["problems"].values()))["attempts"][0]
+        self.assertEqual(attempt["result"], "solution_viewed")
+        self.assertEqual(attempt["assistance"], "full_solution")
+        self.store.assign(assignment(mode="review"))
+        self.assertFalse(self.store.read()["current_problem"]["first_exposure"])
+        state = self.store.record(outcome(transfer=False))
+        self.assertEqual(len(next(iter(state["problems"].values()))["attempts"]), 2)
+        self.assertEqual(
+            state["mastery"]["implementation"]["stages"]["1"]["transfer_ids"], []
+        )
+
+    def test_full_solution_cannot_be_recorded_as_a_solve(self):
+        self.store.assign(assignment())
+        self.store.hint("full_solution")
+        before = self.store.read()
+        for result in ("accepted_reported", "verified_correct"):
+            with self.assertRaises(StoreError):
+                self.store.record(
+                    outcome(result=result, transfer=False, review="2026-10-08")
+                )
+            self.assertEqual(self.store.read(), before)
+
+    def test_solution_viewing_requires_actual_help_and_no_transfer(self):
+        self.store.assign(assignment())
+        with self.assertRaises(StoreError):
+            self.store.record(outcome(result="solution_viewed", transfer=False))
+        self.store.hint("full_solution")
+        with self.assertRaises(StoreError):
+            self.store.record(
+                outcome(result="solution_viewed", transfer=True, review="2026-10-08")
+            )
 
     def test_api_unavailable_saves_pending_next_step_without_fake_assignment(self):
         with self.assertRaises(ClientError):
