@@ -81,16 +81,24 @@ version 3.10+, is the only runtime requirement.
 
 ## API client
 
-`VOIDHUB_COACH_API_KEY` must already exist in the local process environment.
-Do not ask the learner to paste it. `setup_access.py` provisions a private file
-outside Git and prints its digest for the hosting owner; see the repository README.
+The client uses `VOIDHUB_COACH_API_KEY` when set; otherwise it reads the private
+local credential created by `setup_access.py`. Never ask the learner to paste
+a key or print its contents. Provisioning does not activate access: the hosting
+owner must register the digest. An invalid environment override fails instead
+of silently falling back to another credential.
 
 ```text
 python scripts/archive_client.py search --state-dir <learner-dir> --topic "binary search" --limit 5 --output <public-json-file>
+python scripts/archive_client.py candidates --state-dir <learner-dir> --limit 5 --output <public-json-file>
 python scripts/archive_client.py problem --state-dir <learner-dir> --id <returned-id> --output <public-json-file>
 ```
 
 Search also accepts `--contest`, `--difficulty-min`, `--difficulty-max`, `--after`.
+Use `candidates` for new practice after initializing learner memory. It applies
+the same filters, excludes every seen ID, scans at most five pages and refuses
+selection while a question is active or history is invalid. Raw `search` is a
+single-page archive read, useful for deliberate reviews and metadata inspection.
+No suitable candidate returns a clear error, never an invented assignment.
 The JSON output is validated v1 data, never a solution. Full statement contains
 summary plus `statement`, `content_format`, `limits`, `updated_at`, checksum.
 Use only the six summary fields when assigning: id, title, contest, difficulty,

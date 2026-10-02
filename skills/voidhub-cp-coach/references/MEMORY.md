@@ -47,6 +47,12 @@ a question about older evidence, inspect only the relevant part of the full
 history. `show` is available when a complete export is explicitly useful.
 Do not reload unchanged notes or the full JSON after every message.
 
+Totals distinguish distinct independently solved problems, problems solved only
+with hints, and problems whose full solution was viewed. Viewing is exposure,
+not a solve. A later independent review moves a question out of assisted-only
+totals while retaining its assistance history and viewing record. These totals
+describe evidence, not mastery or a verified submission count.
+
 Save requested assistance before giving it and outcomes as soon as they are
 supplied. Save a short handoff before ending; leave unfinished work active.
 Only update profile when facts or preferences change, and plan when workload,

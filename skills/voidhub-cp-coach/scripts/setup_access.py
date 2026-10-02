@@ -6,6 +6,7 @@ import hashlib
 import os
 from pathlib import Path
 import secrets
+import stat
 import subprocess
 import sys
 
@@ -16,6 +17,24 @@ def credential_directory():
         / "VoidHubCoach"
         / "credentials"
     )
+
+
+def read_credential():
+    """Read only the bounded private credential; never include its value in errors."""
+    path = credential_directory() / "trial.token"
+    if path.is_symlink() or path.parent.is_symlink():
+        raise RuntimeError("Credential location cannot be a symlink.")
+    with path.open("r", encoding="ascii") as stream:
+        if os.fstat(stream.fileno()).st_size > 256:
+            raise RuntimeError("Credential file exceeds the bounded size.")
+        if os.name != "nt" and stat.S_IMODE(os.fstat(stream.fileno()).st_mode) & 0o077:
+            raise RuntimeError("Credential file must be private to its owner.")
+        token = stream.read(257).strip()
+    if not 32 <= len(token) <= 128 or not all(
+        c.isascii() and (c.isalnum() or c in "_-") for c in token
+    ):
+        raise RuntimeError("Credential is missing or malformed; never display it.")
+    return token
 
 
 def secure_directory(path):
@@ -51,7 +70,7 @@ def provision(rotate=False):
     if path.is_symlink():
         raise RuntimeError("Credential file cannot be a symlink.")
     if path.exists() and not rotate:
-        token = path.read_text(encoding="ascii").strip()
+        token = read_credential()
     else:
         token = secrets.token_urlsafe(48)
         # Replace through a new restricted file, never a world-readable tempfile.

@@ -1,17 +1,17 @@
 # Coach Mo
 
-Your competitive programming coach, with adaptive practice and progress that carries across sessions.
+Your competitive programming coach, with adaptive practice and progress that
+carries across sessions.
 
 Powered by [VoidHub](https://voidhub.co/)
 
-Coach Mo helps you prepare for ECPC, ACPC and ICPC through real CPC problems
-from VoidHub. It starts with your goal, experience and available time,
-then assesses your level with three problems, one at a time. Training follows
-a flexible VoidHub route: understanding and implementation,
-data organization, algorithmic reasoning, state exploration, then connectivity
-and dynamic programming. Your demonstrated strengths and gaps determine the
-starting point and pace. The catalog tracks 38 topics, including advanced range
-queries, tree methods, DP and string algorithms.
+Coach Mo helps you prepare for ECPC, ACPC and ICPC through real CPC problems from
+VoidHub. It starts with your goal, experience and available time, then assesses
+your level with three problems, one at a time. Training follows a flexible VoidHub
+route: understanding and implementation, data organization, algorithmic reasoning,
+state exploration, then connectivity and dynamic programming. Your demonstrated
+strengths and gaps determine the starting point and pace. The catalog tracks 38
+topics, including advanced range queries, tree methods, DP and string algorithms.
 
 C++ is the default programming language. Ask to switch at any time; the coach
 saves your choice and uses it in later sessions.
@@ -19,15 +19,14 @@ saves your choice and uses it in later sessions.
 The coach keeps replies brief and gives you room to think. It recommends a
 verified YouTube explanation when it fits your language, knowledge and current
 gap. Hints come when you ask, one step at a time. When you request a complete
-solution, the coach offers
-hints first. If you decline, it provides the solution and records it as viewed,
-with no solved-question or mastery credit. Reviews use your reasoning, code
-and actual outcome to choose the next step; they do not treat a few passing
-examples as proof.
+solution, the coach offers hints first. If you decline, it provides the solution
+and records it as viewed, with no solved-question or mastery credit. Reviews use
+your reasoning, code and actual outcome to choose the next step; they do not treat
+a few passing examples as proof.
 
 Every practice question includes its title, contest, VoidHub difficulty,
-statement, samples and link. The trained topic appears in topic practice and
-stays hidden during diagnosis and mixed practice. Archive ratings are estimates;
+statement, samples and link. The trained topic appears in topic practice and stays
+hidden during diagnosis and mixed practice. Archive ratings are estimates;
 original contest indices are shown only when verified.
 
 ## Start training
@@ -51,24 +50,25 @@ installing it.
 
 The coach creates `voidhub-coach-data` in your training workspace. `profile.md`
 keeps your goals, preferences, self-reported strong/weak topics and demonstrated
-strengths with supporting evidence. `plan.md` keeps the
-current workload and a short session handoff. `progress.json` keeps attempts,
-hints, reviews, mastery evidence, video recommendations, coaching decisions and
-the unfinished question. The coach decides whether to stay, advance or review
-a prerequisite, supported by independent attempts and understanding checks.
+strengths with supporting evidence. `plan.md` keeps the current workload and a
+short session handoff. `progress.json` keeps attempts, hints, reviews, mastery
+evidence, video recommendations, coaching decisions and the unfinished question.
+Progress summaries distinguish independent solves, solves with hints and viewed
+solutions. The coach decides whether to stay, advance or review a prerequisite,
+supported by independent attempts and understanding checks.
 
-A new chat reads a compact summary and continues from the saved next step. It
-does not load the entire history into context or replace your plan on each run.
-The full history remains on disk, outside the installed skill, so skill updates
+A new chat reads a compact summary and continues from the saved next step. It does
+not load the entire history into context or replace your plan on each run. The
+full history remains on disk, outside the installed skill, so skill updates
 preserve your progress. Another device needs access to those same learner files.
 Keep learner data and credentials out of Git.
 
 ## Archive access
 
-The coach reads published CPC problems through two authenticated operations:
-`POST /api/coach/v1/search` and `POST /api/coach/v1/problem`. They return public
-metadata, statements and samples. They do not provide solutions, private tests
-or submission access. Each approved installation uses its own bearer key.
+The coach reads published CPC problems through two authenticated operations: `POST
+/api/coach/v1/search` and `POST /api/coach/v1/problem`. They return public
+metadata, statements and samples. They do not provide solutions, private tests or
+submission access. Each approved installation uses its own bearer key.
 
 To provision a trial credential from this repository:
 
@@ -78,35 +78,47 @@ python skills/voidhub-cp-coach/scripts/setup_access.py
 
 The tool stores the key privately and displays only its path and SHA-256 digest.
 The hosting owner adds that digest to `COACH_API_KEY_HASHES`, preserving existing
-comma-separated entries, and restarts the service. On Windows, load your local
-key into the process environment:
+comma-separated entries, and restarts the service. The client automatically reads
+this private local key in later sessions. An explicitly set
+`VOIDHUB_COACH_API_KEY` takes precedence; its value never belongs in chat or Git.
+
+To check access and select unseen practice after initializing learner memory:
 
 ```powershell
-$env:VOIDHUB_COACH_API_KEY = (Get-Content -Raw "$env:LOCALAPPDATA\VoidHubCoach\credentials\trial.token").Trim()
-python skills/voidhub-cp-coach/scripts/archive_client.py search --state-dir ./voidhub-coach-data --limit 3 --output ./voidhub-coach-data/search.json
+python skills/voidhub-cp-coach/scripts/progress_store.py init --data-dir ../voidhub-coach-data
+python skills/voidhub-cp-coach/scripts/archive_client.py candidates --state-dir ../voidhub-coach-data --limit 3 --output ../voidhub-coach-data/candidates.json
 ```
 
 The client bounds request frequency and response sizes, rejects redirects and
-checks returned data. If access is unavailable, the coach saves the pending
-step and waits rather than inventing a question. A bearer key can be used by any
-caller who possesses it; access is dedicated to the coach without proving the
-identity of its client. Railway proxy setup and API contracts live in
-[WORKFLOW.md](skills/voidhub-cp-coach/WORKFLOW.md).
+checks returned data. If access is unavailable, the coach saves the pending step
+and waits rather than inventing a question. A bearer key can be used by any caller
+who possesses it; access is dedicated to the coach without proving the identity of
+its client. Railway proxy setup and API contracts live in
+[WORKFLOW.md](skills/voidhub-cp-coach/references/WORKFLOW.md).
 
 ## Inside the skill
 
 [SKILL.md](skills/voidhub-cp-coach/SKILL.md) defines the coach's behavior and routes
-to guidance as needed. [WORKFLOW.md](skills/voidhub-cp-coach/WORKFLOW.md) describes
-sessions and archive access. [COACHING.md](skills/voidhub-cp-coach/COACHING.md)
-covers hints and reviews. [CURRICULUM.md](skills/voidhub-cp-coach/CURRICULUM.md)
-defines the topic tracks and stages. [PROBLEMS.md](skills/voidhub-cp-coach/PROBLEMS.md)
-governs question selection and presentation. [MEMORY.md](skills/voidhub-cp-coach/MEMORY.md)
+to guidance as needed. [WORKFLOW.md](skills/voidhub-cp-coach/references/WORKFLOW.md) describes
+sessions and archive access. [COACHING.md](skills/voidhub-cp-coach/references/COACHING.md)
+covers hints and reviews. [CURRICULUM.md](skills/voidhub-cp-coach/references/CURRICULUM.md)
+defines the topic tracks and stages. [PROBLEMS.md](skills/voidhub-cp-coach/references/PROBLEMS.md)
+governs question selection and presentation. [MEMORY.md](skills/voidhub-cp-coach/references/MEMORY.md)
 defines learner memory and its commands.
 
 Three Python helpers handle archive access, progress and credential setup.
 `agents/openai.yaml` supplies display metadata, and `progress.schema.json`
-describes the saved state. [RESOURCES.md](skills/voidhub-cp-coach/RESOURCES.md)
-governs video selection, and `curriculum.json` defines coverage and dependencies.
-Behavioral and script tests remain under `tests/`. The catalog covers the
-requested route's topics; suitable CPC questions and teaching resources still
-need verification for each lesson. Educational quality requires session review.
+describes the saved state.
+[RESOURCES.md](skills/voidhub-cp-coach/references/RESOURCES.md) governs video
+selection, and `curriculum.json` defines coverage and dependencies. Supporting
+guidance lives in `references/`; regression tests stay at the repository root in
+`tests/`, outside the installable skill. GitHub Actions runs them on Windows and
+Linux with Python 3.10 and 3.13. To run them locally:
+
+```text
+python -B -m unittest discover -s tests
+```
+
+The catalog covers the requested route's topics; suitable CPC questions and
+teaching resources still need verification for each lesson. Educational quality
+requires session review.

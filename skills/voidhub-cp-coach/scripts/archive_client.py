@@ -10,6 +10,8 @@ import re
 import time
 from urllib import error, parse, request
 
+from setup_access import read_credential
+
 ORIGIN = "https://voidhub.co"
 MAX_BYTES = 256 * 1024
 ID = re.compile(r"[a-f0-9]{32}\Z")
@@ -203,9 +205,17 @@ class ArchiveClient:
     def __init__(
         self, state_dir, token=None, opener=None, clock=time.time, sleep=time.sleep
     ):
-        self.token = (
-            token if token is not None else os.environ.get("VOIDHUB_COACH_API_KEY", "")
-        )
+        if token is None:
+            token = os.environ.get("VOIDHUB_COACH_API_KEY")
+            if token is None:
+                try:
+                    token = read_credential()
+                except (RuntimeError, OSError, UnicodeError):
+                    raise ClientError(
+                        "No usable local credential. Run setup_access.py and ask the hosting owner "
+                        "to register its digest, or set VOIDHUB_COACH_API_KEY privately."
+                    ) from None
+        self.token = token
         if not re.fullmatch(r"[A-Za-z0-9_-]{32,128}", self.token):
             raise ClientError(
                 "Set VOIDHUB_COACH_API_KEY using the private local credential; never paste it in chat."
@@ -352,7 +362,7 @@ class ArchiveClient:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("operation", choices=("search", "problem"))
+    parser.add_argument("operation", choices=("search", "candidates", "problem"))
     parser.add_argument(
         "--state-dir",
         required=True,
@@ -380,14 +390,38 @@ def main():
     )
     if args.operation == "problem" and (not args.id or not ID.fullmatch(args.id)):
         parser.error("--id must be a returned 32-character ID")
-    if args.operation == "search":
+    if args.operation != "problem":
+        if not 0 <= args.difficulty_min <= args.difficulty_max <= 4000:
+            parser.error("Difficulty range must satisfy 0 <= min <= max <= 4000")
+        if args.after is not None and not ID.fullmatch(args.after):
+            parser.error("--after must be a returned 32-character cursor")
         for field in ("topic", "contest", "after"):
             if getattr(args, field) is not None:
                 payload[field] = getattr(args, field)
     try:
-        data = ArchiveClient(Path(args.state_dir) / ".client").call(
-            args.operation, payload
-        )
+        learner_dir = Path(args.state_dir)
+        if args.operation == "candidates":
+            # Import lazily: progress_store also uses this client's state helpers.
+            from progress_store import ProgressStore, StoreError
+
+            try:
+                state = ProgressStore(learner_dir).read()
+            except StoreError as exc:
+                raise ClientError(str(exc)) from None
+            if state["current_problem"] is not None:
+                raise ClientError(
+                    "Resume or record the active problem before selecting another."
+                )
+            seen = {p["metadata"]["id"] for p in state["problems"].values()}
+            items = ArchiveClient(learner_dir / ".client").candidates(payload, seen)
+            data = {"api_version": 1, "items": items, "next_cursor": None}
+            if not items:
+                raise ClientError(
+                    "No unseen candidate within five pages. Keep the selected difficulty; "
+                    "review the filters or defer practice."
+                )
+        else:
+            data = ArchiveClient(learner_dir / ".client").call(args.operation, payload)
         if args.output:
             output = Path(args.output)
             output.parent.mkdir(parents=True, exist_ok=True)

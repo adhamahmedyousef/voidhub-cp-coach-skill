@@ -415,11 +415,23 @@ class ProgressStore:
         recent = []
         reviews = []
         attempt_count = 0
+        independent_solved, assisted_solved, solutions_viewed = set(), set(), set()
         for key, problem in state["problems"].items():
             attempts = problem["attempts"]
             attempt_count += len(attempts)
             revisit_on = None
             for attempt in attempts:
+                solved = attempt["result"] in ("accepted_reported", "verified_correct")
+                if attempt["result"] == "solution_viewed" or (
+                    solved and attempt["assistance"] == "full_solution"
+                ):
+                    solutions_viewed.add(key)
+                elif solved:
+                    (
+                        independent_solved
+                        if attempt["assistance"] == "none"
+                        else assisted_solved
+                    ).add(key)
                 if attempt["revisit_on"] is not None:
                     revisit_on = attempt["revisit_on"]
                 elif attempt["assistance"] == "none" and attempt["result"] in (
@@ -477,6 +489,9 @@ class ProgressStore:
             "totals": {
                 "seen_problems": len(state["problems"]),
                 "attempts": attempt_count,
+                "independent_solved": len(independent_solved),
+                "assisted_only_solved": len(assisted_solved - independent_solved),
+                "solutions_viewed": len(solutions_viewed),
             },
             "mastery": mastery,
             "recent_attempts": recent[:3],

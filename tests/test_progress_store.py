@@ -50,7 +50,16 @@ class StoreTests(unittest.TestCase):
             self.store.record(attempt)
         before = self.store.path.read_bytes()
         compact = self.store.resume()
-        self.assertEqual(compact["totals"], {"seen_problems": 12, "attempts": 12})
+        self.assertEqual(
+            compact["totals"],
+            {
+                "seen_problems": 12,
+                "attempts": 12,
+                "independent_solved": 0,
+                "assisted_only_solved": 12,
+                "solutions_viewed": 0,
+            },
+        )
         self.assertEqual(len(compact["recent_attempts"]), 3)
         self.assertEqual(len(compact["scheduled_reviews"]), 10)
         self.assertEqual(compact["scheduled_review_count"], 12)

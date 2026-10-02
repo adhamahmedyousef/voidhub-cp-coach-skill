@@ -6,3 +6,5 @@ __pycache__/
 voidhub-coach-data/
 *.token
 test-output/
+.coach-*
+*.private

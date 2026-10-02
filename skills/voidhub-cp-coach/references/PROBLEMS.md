@@ -2,8 +2,15 @@
 
 Use the read API only. Search published CPC metadata with limit 5 by default,
 at most 10, and examine at most five result pages per selection/session. Filter
-seen IDs using `progress.json`; source is always `voidhub`. Stop if no suitable
+seen IDs using the `candidates` command and `progress.json`; source is always
+`voidhub`. Stop if no suitable
 candidate exists. Do not broaden difficulty beyond learner readiness silently.
+
+Internal curriculum IDs are not API tags. Use an exact tag already observed in
+archive metadata; do not send IDs such as `arrays_strings` as guessed tags.
+When no verified tag is available, inspect bounded unfiltered metadata within
+the same difficulty range and assess topic fit from the complete statement.
+Tags suggest candidates; they never prove the exercise teaches the chosen topic.
 
 Fetch the complete statement for a candidate before presenting it. Confirm ID,
 contest attribution, URL, topic fit and prerequisites. A tag is not a syllabus
