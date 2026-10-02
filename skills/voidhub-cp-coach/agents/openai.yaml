@@ -1,6 +1,6 @@
 interface:
   display_name: "Coach Mo"
   short_description: "Adaptive CP practice with persistent local progress"
-  default_prompt: "Use $voidhub-cp-coach to assess my level and resume my competitive programming training."
+  default_prompt: "Use $voidhub-cp-coach as Coach Mo to assess my level and continue my competitive programming training."
 policy:
   allow_implicit_invocation: true

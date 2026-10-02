@@ -4,8 +4,8 @@ Your competitive programming coach, with adaptive practice and progress that car
 
 Powered by [VoidHub](https://voidhub.co/)
 
-Coach Mo is VoidHub's competitive programming coach. It helps you prepare for ECPC, ACPC and ICPC through real CPC
-problems from VoidHub. It starts with your goal, experience and available time,
+Coach Mo helps you prepare for ECPC, ACPC and ICPC through real CPC problems
+from VoidHub. It starts with your goal, experience and available time,
 then assesses your level with three problems, one at a time. Training follows
 a flexible VoidHub route: understanding and implementation,
 data organization, algorithmic reasoning, state exploration, then connectivity
@@ -18,11 +18,12 @@ saves your choice and uses it in later sessions.
 
 The coach keeps replies brief and gives you room to think. It recommends a
 verified YouTube explanation when it fits your language, knowledge and current
-gap. Hints come when you
-ask, one step at a time. When you request a complete solution, the coach offers
+gap. Hints come when you ask, one step at a time. When you request a complete
+solution, the coach offers
 hints first. If you decline, it provides the solution and records it as viewed,
-with no solved-question or mastery credit. Reviews use your reasoning, code and actual outcome to
-choose the next step; they do not treat a few passing examples as proof.
+with no solved-question or mastery credit. Reviews use your reasoning, code
+and actual outcome to choose the next step; they do not treat a few passing
+examples as proof.
 
 Every practice question includes its title, contest, VoidHub difficulty,
 statement, samples and link. The trained topic appears in topic practice and
