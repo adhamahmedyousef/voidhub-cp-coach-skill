@@ -6,9 +6,11 @@ Powered by [VoidHub](https://voidhub.co/)
 
 VoidHub CP Coach helps you prepare for ECPC, ACPC and ICPC through real CPC
 problems from VoidHub. It starts with your goal, experience and available time,
-then assesses your level with three problems, one at a time. Training follows an adapted Intensive Camps route through programming and
-algorithm foundations, growing from direct practice into combined ideas and
-mixed problem solving. Advanced camp topics remain outside this first version.
+then assesses your level with three problems, one at a time. Training follows
+a flexible VoidHub route: understanding and implementation,
+data organization, algorithmic reasoning, state exploration, then connectivity
+and dynamic programming. Your demonstrated strengths and gaps determine the
+starting point and pace. Advanced topics remain outside this first version.
 
 The coach keeps replies brief and gives you room to think. Hints come when you
 ask, one step at a time. A complete solution requires an explicit request and is
@@ -40,7 +42,8 @@ installing it.
 ## Memory that carries forward
 
 The coach creates `voidhub-coach-data` in your training workspace. `profile.md`
-keeps your goals, preferences and lasting learning notes. `plan.md` keeps the
+keeps your goals, preferences, self-reported strong/weak topics and demonstrated
+strengths with supporting evidence. `plan.md` keeps the
 current workload and a short session handoff. `progress.json` keeps attempts,
 hints, reviews, mastery evidence and the unfinished question.
 

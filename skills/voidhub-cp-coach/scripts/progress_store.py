@@ -232,7 +232,7 @@ class ProgressStore:
             for name, content in (
                 (
                     "profile.md",
-                    "# Learner profile\n\n## Goal and experience\n\nNot recorded yet.\n\n## Availability and preferences\n\nRecord weekly time, language, timezone and preferred coaching style.\n\n## Learning notes\n\nRecord demonstrated recurring difficulties and preferences with brief evidence.\n",
+                    "# Learner profile\n\n## Goal and experience\n\nNot recorded yet.\n\n## Availability and preferences\n\nRecord weekly time, language, timezone and preferred coaching style.\n\n## Self-reported topics\n\nAsk which topics feel comfortable, studied but not practiced, or difficult. Not assessed yet.\n\n## Observed strengths and difficulties\n\nRecord demonstrated ability and recurring gaps with a problem ID/date and assistance context; keep these separate from self-reports.\n",
                 ),
                 (
                     "plan.md",

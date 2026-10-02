@@ -5,78 +5,77 @@ skills, not a mandatory lecture sequence. Explain and check missing knowledge
 before assigning tasks that depend on it. API ratings are archive metadata and
 may be defaults; do not interpret them as reviewed educational levels.
 
-## Intensive Camps learning route
+## VoidHub learning route
 
-Use the learner's requested camp route when building the weekly plan. This route
-is adapted from [Intensive Camps — Wave 2](https://roadmap.sh/r/intensive-camps---wave-2)
-by Hamed Mohamed / Intensive Training, inspected on 2026-10-02. The source gives
-session groups; this skill adds diagnosis, paced practice and evidence-based
-reviews. Camp levels and the three mastery stages below are different axes.
-A session is a unit of content, not a promise to finish it in one sitting.
+Organize training around five practical capabilities rather than numbered camp
+levels. Select the next capability from the learner's goal, prerequisite gaps
+and observed attempts. Topics remain standard algorithm names because renaming
+them would make practice less precise; their grouping, emphasis and pacing are
+specific to this coach. No external roadmap is required to use this curriculum.
 
-### Level 0: programming foundations
-
-Start here only where diagnosis reveals missing foundations. Follow this order:
-
-| Learning block | Coaching treatment | Persistent topic |
+| Capability | Learning focus | Tracked topics |
 | --- | --- | --- |
-| C++ input/output, variables and conditions, then loops | Explain, trace a small example, check understanding, then practice | implementation |
-| Arrays, strings and frequency arrays | Indexing, traversal, counting and representation | arrays_strings, sorting_frequency |
-| Complexity and tracing | Estimate time/memory and manually trace each learner's approach | Cross-cutting; store observed gaps in profile |
-| Basic math and bit operations | Divisibility, parity, gcd/lcm and simple bit operations as needed | math |
-| Functions, sorting and custom comparators | Reusable functions, ordering and comparator correctness | sorting_frequency |
-| Prefix/suffix sums, partial sums and 2D prefix sums | Range preprocessing before adapting it to another representation | prefix_sums |
-| C++ STL foundations | Teach required containers and operations before using them | Supporting lessons; retain coverage in plan |
-| Two pointers | Pointer invariants, windows and movement | two_pointers |
+| Understand and implement | Extract the task, trace examples, represent data, implement and debug edge cases | implementation, arrays_strings |
+| Organize and preprocess data | Count, order, aggregate and answer range questions; justify time/memory | sorting_frequency, math, prefix_sums |
+| Choose and justify an approach | Establish monotonicity, pointer invariants and local-choice correctness | two_pointers, binary_search, greedy |
+| Explore states and dependencies | Bound enumeration; model grids/graphs; choose traversal or search | backtracking, bfs_dfs |
+| Connect and reuse results | Model connectivity, weighted paths and reusable subproblems | dsu, dijkstra, dp |
 
-Monotonic stacks appear in the source beside two pointers but require a distinct
-invariant. They are a gap in the current tracked curriculum: do not silently
-count their mastery as two-pointers progress or claim full Level 0 completion.
+These capabilities overlap; they are not five certificates or five weeks.
+For example, a learner strong in implementation but weak in choosing an approach
+can work on reasoning while reviewing only the missing preprocessing skill.
+A beginner needs language, loops and indexing first; an experienced learner
+should not repeat those lessons merely to follow an ordered list.
 
-### Level 1: algorithm foundations
+### Select the starting point
 
-Follow binary search, elementary number theory, recursion, backtracking, bounded
-bitmask enumeration, DFS, BFS, elementary counting and introductory DP. Teach
-missing prerequisites before assigning dependent practice.
+Ask which topics the learner believes they handle well, which they have only
+studied and which feel difficult. Ask for a recent representative problem or
+explanation when it materially helps diagnosis; do not require proof for every
+self-report before practice can begin. Save the reported topic map in profile.
+Three diagnostic problems sample selected gaps; they cannot establish mastery
+of every topic. Use later targeted practice to confirm individual strengths.
 
-Binary search uses `binary_search`. Elementary number theory and counting use
-`math`; scope lessons to the learner's current gap rather than claiming all
-number theory is covered. Introduce recursion before `backtracking`, and use
-small bitmask searches only where the state count can be justified. Graph
-practice uses `bfs_dfs`: begin with reachability, flood fill and components;
-then teach bipartiteness, multi-source BFS and topological ordering when the
-needed foundations are demonstrated. Introductory dynamic programming uses `dp`.
+Use self-reports to choose diagnosis and avoid unnecessary lectures. Preserve
+the distinction between a claimed strength, an observed successful application
+and mastery supported by independent attempts. A single accepted problem does
+not establish strength across a whole algorithm family. Existing topic stages
+provide evidence; review explanation, coverage and transfer before advancing.
 
-Record the exact camp lesson and remaining subtopics in `plan.md`. Existing
-mastery IDs aggregate broad topics, not individual camp-session certificates.
-The script's eligibility is necessary evidence; the coach must also check lesson
-coverage and prerequisites before marking a camp block complete. Optional
-`greedy`, `dsu` and `dijkstra` are taught when a practice task or later route
-requires them, rather than jumping to them because a tag appears.
+### Teach the missing skill
 
-### Level 2: extension boundary
+Language syntax and STL are supporting lessons taught as needed. Statement
+comprehension, tracing, complexity, invariants, proofs and debugging are assessed
+throughout the route, rather than postponed to a separate final chapter.
+Retain recurring gaps and demonstrated strengths in profile; put the current
+subtopic and concrete next exercise in plan. Do not create extra tracked IDs
+for each lecture or count a supporting lesson as a solved problem.
 
-The source continues into range-query structures, advanced DP, advanced graph
-and tree methods, and string algorithms. This version supports basic DSU and
-Dijkstra, but has no separate tracking for Fenwick/sparse tables, segment-tree
-variants, digit/bitmask DP, rollback DSU/MST, Euler tours, LCA, DSU on tree,
-KMP/Z, tries or hashing. Do not advertise Level 2 as implemented or credit it
-under a loosely related basic topic. Persist the learner's requested advanced
-route in the plan and state which curriculum/tracking extension it needs.
+Adapt combinations to readiness: frequency with sorting, prefix sums with
+range reasoning, answer search with a check function, recursion with bounded
+search, graph modelling with traversal, then simple state transitions for DP.
+Use small instructional examples before real CPC practice where needed, and
+label those examples clearly rather than assigning them invented contest sources.
 
-### Pacing and practice
+### Plan a sustainable week
 
-Use the actual weekly time rather than a fixed camp duration. A study block
-normally combines a short explanation, a trace or understanding check, one real
-CPC problem and a review. Add another independent problem only after the learner
-finishes the active one. Reserve some available time for assisted upsolving and
-mixed practice instead of filling every hour with new content.
+Choose workload from the learner's available time and actual solving pace.
+Normally combine explanation when needed, one question, review and a saved next
+step. Reserve time for assisted upsolving and mixed practice. Missed sessions
+trigger a smaller realistic plan rather than an accumulating backlog.
 
-A learner who already knows loops and arrays can start at an evidenced gap;
-do not replay Level 0 lectures automatically. If no suitable CPC question exists
-within readiness and the bounded search budget, defer that exercise and record
-why. Instructional mini-examples must be labeled as examples, never attributed
-to a contest. Persist the camp lesson and next action in the session handoff.
+Advance only after the required independent evidence and lesson coverage.
+When time or archive availability is limited, narrow the target skill; do not
+assign an unsuitable harder problem simply to fill a weekly slot. If bounded
+search finds no suitable problem, explain the gap and save the pending action.
+
+### Current scope
+
+The tracked route covers the thirteen topics below. Monotonic stacks, dedicated
+number-theory subtopics, range-query structures, advanced DP, advanced tree
+methods and string algorithms need their own curriculum and tracking extension
+before they can be advertised as supported mastery paths. Record a learner's
+request for such material; do not disguise it under a related basic topic.
 
 ## Tracked topics and mastery
 

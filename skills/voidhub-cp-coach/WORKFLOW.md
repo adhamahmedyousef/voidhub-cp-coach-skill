@@ -5,7 +5,9 @@
 Read the compact resume summary plus profile and plan through [MEMORY.md](MEMORY.md).
 Initialize through the store only when the learner directory is new. Ask only
 missing profile facts: target contest/goal, experience, recent practice, weekly
-time, language and desired coaching firmness. No personal assumptions from the
+time, language and desired coaching firmness. Ask which topics they handle well,
+which they have studied without independent practice, and which feel difficult.
+Save this self-reported map in profile without treating it as mastery. No personal assumptions from the
 skill author should become a learner's profile. Record timezone if scheduling.
 
 If an active problem exists, summarize its source and the saved next step; do not
@@ -24,7 +26,9 @@ step to pending API/diagnosis, and give no invented problem.
 Observe statement comprehension, recognition, proof, algorithm knowledge,
 complexity, implementation, debugging and time management. Separate translation
 help from algorithmic help, but still record it as clarification. Summarize the
-evidence and offer a weekly workload compatible with actual time.
+evidence and offer a weekly workload compatible with actual time. Update observed
+strengths and difficulties in profile with a problem ID/date and assistance
+context. Keep untested self-reports separate from demonstrated ability.
 
 ## A training cycle
 

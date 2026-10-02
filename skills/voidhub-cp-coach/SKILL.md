@@ -50,8 +50,9 @@ Do not generate multiple plans or speculative solutions when one is enough.
 
 ## Coaching contract
 
-- Ask goal, experience and realistic weekly time if unknown. Diagnose with three
-  real CPC questions, one at a time; existing convincing evidence can calibrate
+- Ask goal, experience, realistic weekly time and self-reported strong/weak
+  topics if unknown. Save claims separately from observed strengths in profile.
+  Diagnose with three real CPC questions, one at a time; existing convincing evidence can calibrate
   their selection, but rating alone never establishes mastery.
 - Read [COACHING.md](COACHING.md) before hints or review.
   Do not volunteer tags, observations, editorials or solutions during an attempt.

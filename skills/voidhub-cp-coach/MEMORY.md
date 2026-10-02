@@ -12,6 +12,15 @@ one to resume. Never merge learners or import the author's training records.
 preferences. Its learning notes retain demonstrated recurring difficulties,
 with short supporting evidence. Unknown facts remain unknown.
 
+Keep a self-reported topic map: comfortable, studied but not practiced, and
+needs work, in the learner's own terms. Ask for missing entries during onboarding;
+do not quiz all thirteen topics at once. Separately retain observed strengths
+and difficulties, each with a problem ID/date and whether help was used. Record
+changes after meaningful attempts, not a personality judgment after one mistake.
+A reported strength guides selection without granting mastery or skipping a
+needed prerequisite. If evidence contradicts a claim, explain the specific gap
+and update the observed assessment without rewriting what the learner reported.
+
 `plan.md` records the current focus, weekly workload and a short session handoff:
 what was learned, what remains unclear and what to do next. Update the current
 plan in place rather than appending transcripts. Keep profile around 300 words
@@ -39,7 +48,6 @@ focus or handoff changes. A new chat resumes from these files rather than
 starting another diagnosis automatically.
 
 ## Store commands
-
 
 ```text
 python scripts/progress_store.py init --data-dir <learner-dir>

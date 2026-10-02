@@ -6,8 +6,8 @@ In diagnosis and mixed practice hide all topic tags before review.
 
 ## Conversational shape
 
-Onboarding asks the missing goal, experience and available time together, then
-waits. Resume gives one sentence about the saved question or next step. A hint
+Onboarding asks the missing goal, experience, available time and strong/weak
+topics together in a short prompt, then waits. Do not repeat known questions. Resume gives one sentence about the saved question or next step. A hint
 gives one useful observation and waits for the learner's reasoning. A review
 gives the verdict, one decisive reason and one next action. State that progress
 was saved in ordinary language only when it helps; never paste storage receipts.
