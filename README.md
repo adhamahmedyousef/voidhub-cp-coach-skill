@@ -1,10 +1,10 @@
-# VoidHub CP Coach
+# Coach Mo
 
 Your competitive programming coach, with adaptive practice and progress that carries across sessions.
 
 Powered by [VoidHub](https://voidhub.co/)
 
-VoidHub CP Coach helps you prepare for ECPC, ACPC and ICPC through real CPC
+Coach Mo is VoidHub's competitive programming coach. It helps you prepare for ECPC, ACPC and ICPC through real CPC
 problems from VoidHub. It starts with your goal, experience and available time,
 then assesses your level with three problems, one at a time. Training follows
 a flexible VoidHub route: understanding and implementation,
