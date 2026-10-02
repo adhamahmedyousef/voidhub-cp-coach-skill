@@ -166,6 +166,17 @@ class ClientTests(unittest.TestCase):
         data["problem"]["limits"]["time_scope"] = "all_tests"
         validate_response(data, "problem", {"id": PID})
 
+    def test_malformed_url_and_limit_scope_return_client_errors(self):
+        for mutate in (
+            lambda p: p.update(url="https://[broken/problems/x"),
+            lambda p: p["limits"].update(time_scope=[]),
+            lambda p: p["limits"].update(time_scope={}),
+        ):
+            data = statement()
+            mutate(data["problem"])
+            with self.subTest(data=data), self.assertRaises(ClientError):
+                validate_response(data, "problem", {"id": PID})
+
     def test_401_and_503_are_not_retried_and_errors_hide_token(self):
         for status in (401, 503):
             client = self.client([self.error(status)])

@@ -42,6 +42,15 @@ class StoreTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def test_formatted_state_size_limit_preserves_readable_history(self):
+        before = self.store.path.read_bytes()
+        limit = len(before) + 50
+        with patch.object(progress_store, "MAX_STATE_BYTES", limit):
+            with self.assertRaisesRegex(StoreError, "size limit"):
+                self.store.set_next("A concrete next action. " * 30)
+            self.assertEqual(self.store.path.read_bytes(), before)
+            self.assertEqual(self.store.read()["revision"], 0)
+
     def test_resume_is_bounded_without_discarding_history_or_evidence(self):
         for i in range(12):
             self.store.assign(assignment(f"{i:032x}"))

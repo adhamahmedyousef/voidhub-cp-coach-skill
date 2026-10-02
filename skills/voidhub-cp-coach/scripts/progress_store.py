@@ -49,6 +49,7 @@ LEGACY_TOPICS = (
 CURRICULUM = json.loads((SKILL_DIR / "curriculum.json").read_text(encoding="utf-8"))
 TOPICS = tuple(CURRICULUM)
 CHECKS = ("understanding", "complexity", "coverage", "prerequisites")
+MAX_STATE_BYTES = 8 * 1024 * 1024
 
 
 class StoreError(Exception):
@@ -370,7 +371,7 @@ class ProgressStore:
         if self.path.is_symlink():
             raise StoreError("State file cannot be a symlink.")
         try:
-            if self.path.stat().st_size > 8 * 1024 * 1024:
+            if self.path.stat().st_size > MAX_STATE_BYTES:
                 raise StoreError(
                     "Progress exceeds the state size limit; archive history deliberately."
                 )
@@ -533,7 +534,10 @@ class ProgressStore:
             state["revision"] += 1
             state["mastery"] = compute_mastery(state["problems"])
             validate(state)
-            if len(json.dumps(state, ensure_ascii=False).encode()) > 8 * 1024 * 1024:
+            encoded = (
+                json.dumps(state, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+            ).encode("utf-8")
+            if len(encoded) > MAX_STATE_BYTES:
                 raise StoreError(
                     "Progress exceeds the state size limit; no history was overwritten."
                 )

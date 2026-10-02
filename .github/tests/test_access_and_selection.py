@@ -191,6 +191,29 @@ class AccessAndSelectionTests(unittest.TestCase):
             (1, 0, 1),
         )
 
+    def test_unwritable_output_exits_cleanly_without_disclosing_response(self):
+        with patch.object(archive_client, "ArchiveClient") as client, patch(
+            "sys.argv",
+            [
+                "archive_client.py",
+                "search",
+                "--state-dir",
+                str(self.directory),
+                "--output",
+                str(self.directory),
+            ],
+        ), contextlib.redirect_stderr(io.StringIO()) as error:
+            client.return_value.call.return_value = {
+                "api_version": 1,
+                "items": [summary()],
+                "next_cursor": None,
+            }
+            with self.assertRaises(SystemExit) as raised:
+                archive_client.main()
+            self.assertEqual(raised.exception.code, 1)
+            self.assertIn("local path and permissions", error.getvalue())
+            self.assertNotIn(TOKEN, error.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

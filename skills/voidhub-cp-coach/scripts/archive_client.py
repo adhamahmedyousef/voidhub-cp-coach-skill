@@ -49,7 +49,7 @@ def atomic_json(path, value):
     path = Path(path)
     fd, temporary = tempfile.mkstemp(prefix=".coach-", dir=path.parent)
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as stream:
             json.dump(value, stream, ensure_ascii=False, indent=2, allow_nan=False)
             stream.write("\n")
             stream.flush()
@@ -68,7 +68,10 @@ def summary_valid(item):
         raise ClientError("Invalid problem ID.")
     if not isinstance(item["title"], str) or not item["title"].strip():
         raise ClientError("Missing problem title.")
-    url = parse.urlsplit(item["url"] if isinstance(item["url"], str) else "")
+    try:
+        url = parse.urlsplit(item["url"] if isinstance(item["url"], str) else "")
+    except ValueError:
+        raise ClientError("Malformed problem URL.") from None
     if (
         url.scheme != "https"
         or url.netloc != "voidhub.co"
@@ -181,7 +184,7 @@ def validate_response(data, operation, payload):
                 type(limits[k]) is not int or limits[k] <= 0
                 for k in ("time_ms", "memory_mb")
             )
-            or limits["time_scope"] not in {"per_test", "all_tests"}
+            or limits["time_scope"] not in ("per_test", "all_tests")
         ):
             raise ClientError("Invalid resource limits.")
         digest = hashlib.sha256(
@@ -430,6 +433,11 @@ def main():
             print(json.dumps(data, ensure_ascii=False, indent=2))
     except ClientError as exc:
         parser.exit(1, str(exc) + "\n")
+    except OSError:
+        parser.exit(
+            1,
+            "Client state or output could not be saved. Check the local path and permissions.\n",
+        )
 
 
 if __name__ == "__main__":
