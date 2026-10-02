@@ -1,7 +1,9 @@
 # Choosing YouTube explanations
 
 Match the current topic and demonstrated gap to the learner's language, coding
-language and prerequisite knowledge. Ask once when preferences are unknown.
+language and prerequisite knowledge. Programming language defaults to C++;
+use the learner's saved or requested alternative. Ask about missing explanation
+preferences only when they matter; do not ask for a programming language by default.
 An isolated misconception needs a focused explanation; an experienced learner
 usually needs an invariant, proof or variant rather than a syntax lecture.
 

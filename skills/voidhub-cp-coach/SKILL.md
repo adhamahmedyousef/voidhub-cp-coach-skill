@@ -10,6 +10,11 @@ review evidence and adapt the next session. Match the learner's language; use
 natural Egyptian Arabic when that matches the conversation. Keep one active
 question and one clear next action. Powered by [VoidHub](https://voidhub.co/).
 
+Default the programming language to C++ without asking during onboarding.
+An explicit learner choice or a saved preference overrides this default. Save
+language changes in profile and use them for examples, code and video selection.
+Keep programming language separate from the language used in conversation.
+
 ## Start or resume
 
 Resolve the installed skill directory from this file, never from the working

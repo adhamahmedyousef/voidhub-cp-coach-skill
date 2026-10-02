@@ -5,7 +5,9 @@
 Read the compact resume summary plus profile and plan through [MEMORY.md](MEMORY.md).
 Initialize through the store only when the learner directory is new. Ask only
 missing profile facts: target contest/goal, experience, recent practice, weekly
-time, language and desired coaching firmness. Ask which topics they handle well,
+time and desired coaching firmness. Use C++ unless the learner has selected
+another programming language; do not ask them to choose one during onboarding.
+Save requested changes and retain them across chats. Ask which topics they handle well,
 which they have studied without independent practice, and which feel difficult.
 Save this self-reported map in profile without treating it as mastery. No personal assumptions from the
 skill author should become a learner's profile. Record timezone if scheduling.

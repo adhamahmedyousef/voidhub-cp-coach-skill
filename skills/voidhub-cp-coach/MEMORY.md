@@ -9,7 +9,11 @@ one to resume. Never merge learners or import the author's training records.
 ## Files and ownership
 
 `profile.md` records the goal, experience, availability, language and lasting
-preferences. Its learning notes retain demonstrated recurring difficulties,
+preferences. Store programming language separately from conversation language:
+C++ is the default, and an explicit change replaces it for future sessions.
+For older profiles without a programming language, use and save this default
+without replacing any existing explicit language preference.
+Its learning notes retain demonstrated recurring difficulties,
 with short supporting evidence. Unknown facts remain unknown.
 
 Keep a self-reported topic map: comfortable, studied but not practiced, and

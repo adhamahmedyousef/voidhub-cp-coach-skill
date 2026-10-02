@@ -13,6 +13,9 @@ and dynamic programming. Your demonstrated strengths and gaps determine the
 starting point and pace. The catalog tracks 38 topics, including advanced range
 queries, tree methods, DP and string algorithms.
 
+C++ is the default programming language. Ask to switch at any time; the coach
+saves your choice and uses it in later sessions.
+
 The coach keeps replies brief and gives you room to think. It recommends a
 verified YouTube explanation when it fits your language, knowledge and current
 gap. Hints come when you

@@ -7,7 +7,8 @@ exercise or a reviewed teaching resource is available in the archive.
 
 ## Route and starting point
 
-Ask goal, time, language and reported strong/weak topics; record claims separately
+Ask goal, time and reported strong/weak topics; use the saved programming
+language, defaulting to C++. Record claims separately
 from demonstrated ability. Diagnose with three real questions, one at a time,
 then assess further gaps through targeted practice. Three questions cannot test
 all 38 topics. Start at an evidenced gap rather than repeating known lessons.
