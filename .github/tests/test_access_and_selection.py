@@ -114,6 +114,8 @@ class AccessAndSelectionTests(unittest.TestCase):
             "sys.argv",
             [
                 "archive_client.py",
+                "--access",
+                "api",
                 "candidates",
                 "--state-dir",
                 str(learner),
@@ -138,7 +140,7 @@ class AccessAndSelectionTests(unittest.TestCase):
             before = store.path.read_bytes()
             with patch.object(archive_client, "ArchiveClient") as client, patch(
                 "sys.argv",
-                ["archive_client.py", "candidates", "--state-dir", str(learner)],
+                ["archive_client.py", "candidates", "--access", "api", "--state-dir", str(learner)],
             ), contextlib.redirect_stderr(io.StringIO()):
                 with self.assertRaises(SystemExit):
                     archive_client.main()
@@ -150,7 +152,7 @@ class AccessAndSelectionTests(unittest.TestCase):
         store.init()
         with patch.object(archive_client, "ArchiveClient") as client, patch(
             "sys.argv",
-            ["archive_client.py", "candidates", "--state-dir", str(store.directory)],
+            ["archive_client.py", "candidates", "--access", "api", "--state-dir", str(store.directory)],
         ), contextlib.redirect_stderr(io.StringIO()) as error:
             client.return_value.candidates.return_value = []
             with self.assertRaises(SystemExit):
@@ -196,6 +198,8 @@ class AccessAndSelectionTests(unittest.TestCase):
             "sys.argv",
             [
                 "archive_client.py",
+                "--access",
+                "api",
                 "search",
                 "--state-dir",
                 str(self.directory),

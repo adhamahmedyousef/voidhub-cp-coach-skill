@@ -1,12 +1,13 @@
 # Selecting and presenting real CPC questions
 
-Use the read API only. Search published CPC metadata with limit 5 by default,
-at most 10, and examine at most five result pages per selection/session. Filter
+Use the declared public read client by default, without a key or account.
+Search published CPC metadata with limit 5 by default, at most 10, and examine
+at most five result batches per selection/session. Filter
 seen IDs using the `candidates` command and `progress.json`; source is always
 `voidhub`. Stop if no suitable
 candidate exists. Do not broaden difficulty beyond learner readiness silently.
 
-Internal curriculum IDs are not API tags. Use an exact tag already observed in
+Internal curriculum IDs are not archive tags. Use an exact tag already observed in
 archive metadata; do not send IDs such as `arrays_strings` as guessed tags.
 When no verified tag is available, inspect bounded unfiltered metadata within
 the same difficulty range and assess topic fit from the complete statement.
@@ -15,7 +16,12 @@ Tags suggest candidates; they never prove the exercise teaches the chosen topic.
 Fetch the complete statement for a candidate before presenting it. Confirm ID,
 contest attribution, URL, topic fit and prerequisites. A tag is not a syllabus
 review. An absent contest name is a data issue; an absent problem number may be
-omitted. In API v1, `contest.problem_number` is the VoidHub collection-wide
+omitted. Public mode leaves it null. Public IDs are deterministic fingerprints
+of canonical problem URLs, not database IDs; keep one access mode for a learner
+workspace. Before an explicit switch, reconcile existing problems by URL to
+avoid repeating them under another ID. Public pages are parsed as inert text;
+if their structure changes, stop rather than guess missing sections.
+In the optional API v1, `contest.problem_number` is the VoidHub collection-wide
 archive position, not the original contest index. Omit it from the contest
 attribution; if useful, show it separately as "VoidHub archive number". Only
 state an original contest index when independently verified. Never convert

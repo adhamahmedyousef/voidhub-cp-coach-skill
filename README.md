@@ -31,7 +31,8 @@ original contest indices are shown only when verified.
 
 ## Start training
 
-You need Python 3.10+ and an approved VoidHub Coach API key. The skill's scripts
+You need Python 3.10+. No account, API key, payment or manual activation is
+required. The skill's scripts
 use the Python standard library and have no runtime package dependencies.
 
 Copy `skills/voidhub-cp-coach` into `.agents/skills/voidhub-cp-coach` in your
@@ -63,30 +64,48 @@ full history remains on disk, outside the installed skill, so skill updates
 preserve your progress. Another device needs access to those same learner files.
 Keep learner data and credentials out of Git.
 
-## Archive access
+## Archive access (works immediately)
 
-The coach reads published CPC problems through two authenticated operations: `POST
-/api/coach/v1/search` and `POST /api/coach/v1/problem`. They return public
-metadata, statements and samples. They do not provide solutions, private tests or
-submission access. Each approved installation uses its own bearer key.
+The default client reads published CPC listing and selected problem pages on
+VoidHub without login or credentials. It retrieves metadata, complete statements
+and public samples, never executes page scripts, submits code or retrieves
+editorials/private judging data. Only public filters and the selected problem
+path leave the machine. Learner progress and code stay local. TLS verification,
+same-origin checks, response bounds and pacing remain enabled.
 
-To provision a trial credential from this repository:
-
-```powershell
-python skills/voidhub-cp-coach/scripts/setup_access.py
-```
-
-The tool stores the key privately and displays only its path and SHA-256 digest.
-The hosting owner adds that digest to `COACH_API_KEY_HASHES`, preserving existing
-comma-separated entries, and restarts the service. The client automatically reads
-this private local key in later sessions. An explicitly set
-`VOIDHUB_COACH_API_KEY` takes precedence; its value never belongs in chat or Git.
-
-To check access and select unseen practice after initializing learner memory:
+Start with public access after initializing learner memory:
 
 ```powershell
 python skills/voidhub-cp-coach/scripts/progress_store.py init --data-dir ../voidhub-coach-data
 python skills/voidhub-cp-coach/scripts/archive_client.py candidates --state-dir ../voidhub-coach-data --limit 3 --output ../voidhub-coach-data/candidates.json
+```
+
+Public IDs are deterministic fingerprints of canonical problem URLs, different
+from database IDs. Pagination cursors are opaque. Keep one access mode per
+learner workspace, or reconcile existing questions by URL before an explicit
+switch to avoid repeats under another ID.
+
+### Optional API integration
+
+Existing API users may append `--access api` to use the authenticated read API.
+It reads only `VOIDHUB_COACH_API_KEY` or the existing bounded private local token
+file, and sends it only to the two declared Coach API endpoints. API access does
+not gate public coaching. No user needs to contact the developer to use the skill.
+
+`setup_access.py` is an optional operator tool, never part of normal onboarding.
+Its fixed Windows `whoami`/`icacls` calls only restrict the credential directory;
+it accepts no arbitrary shell input. Generated API digests require matching
+operator configuration, and private credentials never belong in chat or Git.
+
+Network/local-write permissions are declared in
+[SKILL.md](skills/voidhub-cp-coach/SKILL.md). If the public archive is unavailable,
+save the pending step and resume later without inventing a question. Already
+saved practice and progress remain available.
+
+To explicitly use the optional API:
+
+```powershell
+python skills/voidhub-cp-coach/scripts/archive_client.py candidates --access api --state-dir ../voidhub-coach-data --limit 3 --output ../voidhub-coach-data/candidates.json
 ```
 
 The client bounds request frequency and response sizes, rejects redirects and
@@ -106,7 +125,7 @@ defines the topic tracks and stages. [PROBLEMS.md](skills/voidhub-cp-coach/refer
 governs question selection and presentation. [MEMORY.md](skills/voidhub-cp-coach/references/MEMORY.md)
 defines learner memory and its commands.
 
-Three Python helpers handle archive access, progress and credential setup.
+Three Python helpers handle archive access, progress and optional operator credential setup.
 `agents/openai.yaml` supplies display metadata, and `progress.schema.json`
 describes the saved state.
 [RESOURCES.md](skills/voidhub-cp-coach/references/RESOURCES.md) governs video
